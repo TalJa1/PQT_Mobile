@@ -7,7 +7,11 @@ interface WeatherDisplayProps {
 }
 
 const WeatherDisplay: React.FC<WeatherDisplayProps> = ({textColor}) => {
-  const displayDate = 'Ngày 16 tháng 5 năm 2025';
+  const currentDate = new Date();
+  const day = currentDate.getDate();
+  const month = currentDate.getMonth() + 1;
+  const year = currentDate.getFullYear();
+  const displayDate = `Ngày ${day} tháng ${month} năm ${year}`;
 
   const dynamicStyles = StyleSheet.create({
     dateText: {
