@@ -1,23 +1,21 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {vh, vw} from '../../services/styleProps'; // Adjusted path
+import {vh, vw} from '../../services/styleProps';
+import {homeDiagram} from '../../assets/svgIcon';
+
+const DAY_WAVE_HEIGHT = vh(6);
+const NIGHT_WAVE_DEPTH = vh(3);
+const GRAPH_TOTAL_HEIGHT = DAY_WAVE_HEIGHT + NIGHT_WAVE_DEPTH;
+
+const GRAPH_AREA_WIDTH = vw(55);
+const NIGHT_WAVE_WIDTH = vw(13);
 
 const AdditionalInfo = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.sunriseSunsetSection}>
-        <View style={styles.timePoint}>
-          <Text style={styles.timeLabel}>Bình minh</Text>
-          <Text style={styles.timeValue}>06:25 AM</Text>
-        </View>
-        <View style={styles.graphContainer}>
-          <View style={styles.darkBlueWaveLeft} />
-          <View style={styles.lightBlueWave} />
-          <View style={styles.darkBlueWaveRight} />
-        </View>
-        <View style={styles.timePoint}>
-          <Text style={styles.timeLabel}>Hoàng hôn</Text>
-          <Text style={styles.timeValue}>05:30 PM</Text>
+      <View style={styles.sunGraphOuterContainer}>
+        <View style={styles.sunGraphContent}>
+          {homeDiagram(vw(90), vh(15))}
         </View>
       </View>
 
@@ -67,58 +65,78 @@ const styles = StyleSheet.create({
     marginTop: vh(2),
     alignItems: 'center',
   },
-  // Sunrise/Sunset Styles
-  sunriseSunsetSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end', // Align items to bottom for time text
+  sunGraphOuterContainer: {
     width: '100%',
-    marginBottom: vh(3),
-    height: vh(12), // Approximate height
-  },
-  timePoint: {
     alignItems: 'center',
-    marginBottom: vh(1), // Adjust to align with bottom of graph
+    marginBottom: vh(3),
+  },
+  sunGraphContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: 'auto',
+  },
+  timeInfoBlock: {
+    alignItems: 'center',
+    width: vw(22),
   },
   timeLabel: {
-    fontSize: vw(3.5),
-    color: '#666',
+    fontSize: vw(3.2),
+    color: '#808080',
+    marginBottom: vh(0.3),
   },
   timeValue: {
-    fontSize: vw(3.8),
-    color: '#333',
+    fontSize: vw(4),
+    color: '#404040',
     fontWeight: '500',
+    marginBottom: vh(0.5),
   },
-  graphContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end', // Align waves to the bottom
-    height: '80%', // Relative to sunriseSunsetSection height
-    width: vw(50), // Width of the graph area
+  verticalDashedLine: {
+    width: 1,
+    borderLeftWidth: 1.5,
+    borderColor: '#C0C0C0',
+    borderStyle: 'dashed',
   },
-  lightBlueWave: {
-    height: '100%', // Takes full height of graphContainer
-    width: '70%', // Main wave part
-    backgroundColor: '#A0D2FA', // Light blue
-    borderTopLeftRadius: vw(15),
-    borderTopRightRadius: vw(15),
+  graphVisualArea: {
+    width: GRAPH_AREA_WIDTH,
+    height: GRAPH_TOTAL_HEIGHT,
+    marginHorizontal: vw(1),
+    position: 'relative',
   },
-  darkBlueWaveLeft: {
-    height: '30%', // Smaller part of the wave
-    width: '15%',
-    backgroundColor: '#1F2D54', // Dark blue
-    borderTopRightRadius: vw(5), // Smooth transition
-    borderBottomRightRadius: vw(5),
+  dayWave: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: DAY_WAVE_HEIGHT,
+    backgroundColor: '#A0D2FA',
+    borderTopLeftRadius: DAY_WAVE_HEIGHT * 1.8,
+    borderTopRightRadius: DAY_WAVE_HEIGHT * 1.8,
   },
-  darkBlueWaveRight: {
-    height: '30%',
-    width: '15%',
-    backgroundColor: '#1F2D54',
-    borderTopLeftRadius: vw(5),
-    borderBottomLeftRadius: vw(5),
+  nightWave: {
+    position: 'absolute',
+    top: DAY_WAVE_HEIGHT,
+    left: 0,
+    width: NIGHT_WAVE_WIDTH,
+    height: NIGHT_WAVE_DEPTH,
+    backgroundColor: '#0B204C',
+    borderBottomLeftRadius: NIGHT_WAVE_DEPTH * 1.5,
+    borderBottomRightRadius: NIGHT_WAVE_DEPTH * 1.5,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
-  // Warning Card Styles
+  horizontalBaseline: {
+    position: 'absolute',
+    top: DAY_WAVE_HEIGHT,
+    left: NIGHT_WAVE_WIDTH,
+    right: 0,
+    height: 1,
+    borderTopWidth: 1.5,
+    borderColor: '#C0C0C0',
+    borderStyle: 'dashed',
+  },
   warningCard: {
-    backgroundColor: '#2A3B5D', // Dark blue-grey
+    backgroundColor: '#2A3B5D',
     borderRadius: vw(3),
     padding: vw(4),
     width: '100%',
