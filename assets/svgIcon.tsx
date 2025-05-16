@@ -12,14 +12,15 @@ export const test = (w?: any, h?: any, color?: any) => {
 };
 
 export const homeIcon = (w?: any, h?: any, color?: any) => {
-  const xml = `<svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5 13.5L18.5 3L32 13.5V30C32 30.7957 31.6839 31.5587 31.1213 32.1213C30.5587 32.6839 29.7956 33 29 33H8C7.20435 33 6.44129 32.6839 5.87868 32.1213C5.31607 31.5587 5 30.7957 5 30V13.5Z" stroke=${
+  const xml = `<svg width="57" height="56" viewBox="0 0 57 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 23.5L28.5 13L42 23.5V40C42 40.7957 41.6839 41.5587 41.1213 42.1213C40.5587 42.6839 39.7956 43 39 43H18C17.2044 43 16.4413 42.6839 15.8787 42.1213C15.3161 41.5587 15 40.7957 15 40V23.5Z" stroke=${
     color ?? '#C9E5FF'
   } stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M14 33V18H23V33" stroke=${
+<path d="M24 43V28H33V43" stroke=${
     color ?? '#C9E5FF'
   } stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
+
 `;
 
   return <SvgXml xml={xml} width={w} height={h} />;

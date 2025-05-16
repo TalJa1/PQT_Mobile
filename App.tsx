@@ -19,8 +19,8 @@ const App = () => {
     const createTabBarIcon =
       (iconComponent: Function) =>
       ({color, focused}: {color: string; focused: boolean}) => {
-        const iconOnlySize = vw(5.5);
-        const iconContainerSize = vw(8);
+        const iconOnlySize = vw(9);
+        const iconContainerSize = vw(10);
 
         return (
           <View
