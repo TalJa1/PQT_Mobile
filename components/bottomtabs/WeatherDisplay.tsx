@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   weatherIcon: {
     width: vw(35),
-    height: vw(30),
+    height: vw(35),
     resizeMode: 'contain',
   },
   temperatureContainer: {
