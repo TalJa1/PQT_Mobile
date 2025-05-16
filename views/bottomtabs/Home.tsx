@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WeatherDisplay from '../../components/bottomtabs/WeatherDisplay';
+import AdditionalInfo from '../../components/bottomtabs/AdditionalInfo'; // Import the new component
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <StatusBar barStyle="dark-content" backgroundColor={'#C9E5FF'} />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <WeatherDisplay textColor="#1F2D54" />
+        <AdditionalInfo /> {/* Add the new component here */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -27,5 +29,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     alignItems: 'center',
+    paddingBottom: 20,
   },
 });
