@@ -43,3 +43,4 @@ export const marginHorizontal: TextStyle = {
   marginHorizontal: vw(5),
   marginVertical: vh(1),
 };
+

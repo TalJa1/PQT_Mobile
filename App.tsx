@@ -52,8 +52,14 @@ const App = () => {
             backgroundColor: '#1F2D54',
             height: vh(7),
             paddingTop: vh(1),
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
           },
-          headerShown: false, // Apply to all screens
+          headerShown: false,
         }}>
         <Tab.Screen
           name="Home"

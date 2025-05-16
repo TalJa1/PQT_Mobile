@@ -3,6 +3,7 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WeatherDisplay from '../../components/bottomtabs/WeatherDisplay';
 import AdditionalInfo from '../../components/home/AdditionalInfo';
+import {vh} from '../../services/styleProps';
 
 const Home = () => {
   return (
@@ -25,6 +26,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: vh(10),
   },
 });

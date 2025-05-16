@@ -1,11 +1,12 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {vh} from '../../services/styleProps';
 
 const Predict = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View>
           <Text>Predict</Text>
         </View>
@@ -19,6 +20,10 @@ export default Predict;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'black',
+  },
+  scrollViewContent: {
+    alignItems: 'center',
+    paddingBottom: vh(10),
   },
 });
