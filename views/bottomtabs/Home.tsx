@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import WeatherDisplay from '../../components/bottomtabs/WeatherDisplay';
 import AdditionalInfo from '../../components/home/AdditionalInfo';
 import {vh} from '../../services/styleProps';
-import CustomStatusBar from '../../services/CustomStatusBar';
+import CustomStatusBar from '../../components/CustomStatusBar';
 
 const Home = () => {
   return (
