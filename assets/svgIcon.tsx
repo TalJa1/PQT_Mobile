@@ -79,7 +79,6 @@ export const menuIcon = (w?: any, h?: any, color?: any) => {
 
 export const reportIcon = (w?: any, h?: any, color?: any) => {
   const xml = `<svg width="57" height="56" viewBox="0 0 57 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.5" width="56" height="56" rx="28" fill="#C9E5FF"/>
 <path d="M28.5 43C36.7843 43 43.5 36.2843 43.5 28C43.5 19.7157 36.7843 13 28.5 13C20.2157 13 13.5 19.7157 13.5 28C13.5 36.2843 20.2157 43 28.5 43Z" stroke=${
     color ?? '#1F2D54'
   } stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -96,6 +95,7 @@ export const reportIcon = (w?: any, h?: any, color?: any) => {
     color ?? '#1F2D54'
   } stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
+
 `;
 
   return <SvgXml xml={xml} width={w} height={h} />;
