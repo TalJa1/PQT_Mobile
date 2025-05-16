@@ -2,7 +2,7 @@ import {ScrollView, StatusBar, StyleSheet} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WeatherDisplay from '../../components/bottomtabs/WeatherDisplay';
-import AdditionalInfo from '../../components/bottomtabs/AdditionalInfo'; // Import the new component
+import AdditionalInfo from '../../components/home/AdditionalInfo';
 
 const Home = () => {
   return (
