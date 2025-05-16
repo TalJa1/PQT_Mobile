@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {vh, vw} from '../../services/styleProps'; // Adjusted path
 
 const AdditionalInfo = () => {
   return (
     <View style={styles.container}>
-      {/* Sunrise/Sunset Section */}
       <View style={styles.sunriseSunsetSection}>
         <View style={styles.timePoint}>
           <Text style={styles.timeLabel}>Bình minh</Text>
@@ -15,7 +14,6 @@ const AdditionalInfo = () => {
           <View style={styles.darkBlueWaveLeft} />
           <View style={styles.lightBlueWave} />
           <View style={styles.darkBlueWaveRight} />
-          {/* Dotted lines would typically require a library or more complex drawing */}
         </View>
         <View style={styles.timePoint}>
           <Text style={styles.timeLabel}>Hoàng hôn</Text>
@@ -23,7 +21,6 @@ const AdditionalInfo = () => {
         </View>
       </View>
 
-      {/* Emergency Warning Card */}
       <View style={styles.warningCard}>
         <View style={styles.warningHeader}>
           <Text style={styles.warningIcon}>⚠️</Text>
@@ -44,12 +41,13 @@ const AdditionalInfo = () => {
               </View>
             </View>
           </View>
-          {/* Placeholder for tornado icon, consider using an Image */}
-          <Text style={styles.tornadoIcon}>🌪️</Text>
+          <Image
+            source={require('../../assets/home/tonardo.png')}
+            style={styles.tornadoIcon}
+          />
         </View>
       </View>
 
-      {/* Buttons Section */}
       <View style={styles.buttonsSection}>
         <TouchableOpacity style={styles.buttonDark}>
           <Text style={styles.buttonDarkText}>Chi tiết cảnh báo</Text>
@@ -143,8 +141,6 @@ const styles = StyleSheet.create({
   },
   warningBody: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   warningTextContainer: {
     flex: 1,
@@ -160,7 +156,7 @@ const styles = StyleSheet.create({
     marginTop: vh(0.5),
   },
   severityBadge: {
-    backgroundColor: '#FFA500', // Orange
+    backgroundColor: '#FFA500',
     borderRadius: vw(4),
     paddingHorizontal: vw(3),
     paddingVertical: vw(1),
@@ -168,22 +164,21 @@ const styles = StyleSheet.create({
   },
   severityText: {
     fontSize: vw(3.5),
-    color: '#000000', // Black
+    color: '#000000',
     fontWeight: 'bold',
   },
   tornadoIcon: {
-    fontSize: vw(12), // Adjust size as needed
-    color: 'white', // Or use an Image component
-    opacity: 0.7,
+    width: vw(17),
+    height: vw(17),
+    resizeMode: 'contain',
   },
-  // Buttons Section Styles
   buttonsSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
   },
   buttonDark: {
-    backgroundColor: '#3A3A3A', // Dark grey
+    backgroundColor: '#3A3A3A',
     paddingVertical: vh(1.5),
     paddingHorizontal: vw(5),
     borderRadius: vw(2),
