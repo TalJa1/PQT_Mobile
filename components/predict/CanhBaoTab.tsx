@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   View,
@@ -87,7 +88,7 @@ const CanhBaoTab = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             {selectedCaution && (
-              <ScrollView>
+              <ScrollView contentContainerStyle={styles.modalScrollContainer}>
                 <Text style={styles.modalTitle}>
                   {selectedCaution.detailsTitle}
                 </Text>
@@ -135,11 +136,61 @@ const CanhBaoTab = () => {
                 )}
               </ScrollView>
             )}
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Đóng</Text>
-            </TouchableOpacity>
+            <View style={styles.ButtonBottomGroup}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: vh(2),
+                  alignItems: 'center',
+                }}>
+                <Text style={{fontSize: 14, fontWeight: 700, color: '#1F2D54'}}>
+                  Mức độ nguy hiểm:{' '}
+                </Text>
+                <View
+                  style={[
+                    styles.dangerLevelCircle,
+                    {backgroundColor: '#1F2D54'},
+                  ]}>
+                  <Text style={[styles.dangerLevelNumber, {color: '#FFA500'}]}>
+                    {selectedCaution?.dangerLevel}
+                  </Text>
+                </View>
+              </View>
+                <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderColor: '#1F2D54',
+                  borderWidth: 1,
+                  borderRadius: 15,
+                  paddingVertical: vh(1),
+                  paddingHorizontal: vw(4),
+                  marginTop: vh(2),
+                }}>
+                <Text
+                  style={{
+                  color: '#1F2D54',
+                  fontWeight: 'bold',
+                  fontSize: vw(4),
+                  marginRight: vw(2),
+                  }}>
+                  Xem kỹ năng ứng phó với bão
+                </Text>
+                <Text
+                  style={{
+                  color: '#1F2D54',
+                  fontSize: vw(5),
+                  fontWeight: 'bold',
+                  }}>
+                  &gt;
+                </Text>
+                </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.closeButtonText}>Đóng</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -248,11 +299,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContainer: {
-    height: '60%', // Half screen, adjust as needed
+    height: '80%', // Half screen, adjust as needed
     backgroundColor: '#1F2D54', // Same as caution item
     borderTopLeftRadius: vw(5),
     borderTopRightRadius: vw(5),
-    padding: vw(5),
   },
   modalTitle: {
     fontSize: vw(5.5),
@@ -283,6 +333,15 @@ const styles = StyleSheet.create({
     fontSize: vw(4.2),
     fontWeight: 'bold',
     color: '#1F2D54',
+  },
+  ButtonBottomGroup: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: '#FFAC33',
+  },
+  modalScrollContainer: {
+    padding: vw(5),
+    paddingBottom: vh(2),
   },
 });
 
