@@ -2,19 +2,21 @@ import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import {vw, vh} from '../../services/styleProps';
 
-// Generate 24 hours of data for "Hôm nay"
 const generateHourlyData = () => {
   const data = [];
   const now = new Date();
-  const currentHour = now.getHours();
+  const currentActualHour = now.getHours();
 
-  for (let i = 0; i < 24; i++) {
-    const hour = (currentHour + i) % 24;
-    const displayTime = i === 0 ? 'Bây giờ' : `${hour.toString().padStart(2, '0')}:00`;
+  for (let h = 0; h < 24; h++) {
+    const isCurrentHour = h === currentActualHour;
+    const displayTime = isCurrentHour
+      ? 'Bây giờ'
+      : `${h.toString().padStart(2, '0')}:00`;
     data.push({
       time: displayTime,
-      hour: hour, // Store actual hour for highlighting logic if needed later
-      icon: 'sun', // Placeholder, replace with actual logic
+      hour: h, // Store actual hour for logic
+      isCurrent: isCurrentHour, // Flag for current hour
+      icon: 'sun', // Placeholder, replace with actual logic based on hour h
       temp: `${18 + Math.floor(Math.random() * 5)}°`, // Random temp for example
       rain: `${Math.floor(Math.random() * 50)}%`, // Random rain % for example
     });
@@ -43,20 +45,16 @@ const iconMap: {[key: string]: any} = {
 
 const ThoiTietTab = () => {
   const scrollViewRef = React.useRef<ScrollView>(null);
-  const currentHourItemRef = React.useRef<View>(null);
 
   React.useEffect(() => {
-    // Attempt to scroll to the "Bây giờ" item
-    // This might need adjustment based on layout calculations
-    // A slight delay might be needed for layout to complete
     setTimeout(() => {
-      // Find the index of "Bây giờ"
-      const nowIndex = hourlyData.findIndex(item => item.time === 'Bây giờ');
+      const nowIndex = hourlyData.findIndex(item => item.isCurrent);
       if (nowIndex !== -1 && scrollViewRef.current) {
-        // Assuming each item has a width of vw(20) + vw(1.5)*2 for margins
-        const itemWidth = vw(20) + vw(3); // Approximate width
-        const scrollToX = nowIndex * itemWidth - vw(40); // Try to center it a bit
-        scrollViewRef.current.scrollTo({x: Math.max(0, scrollToX), animated: true});
+        const itemWidth = vw(20) + vw(3);
+        const screenCenterOffset = vw(50) - itemWidth / 2;
+        let scrollToX = nowIndex * itemWidth - screenCenterOffset;
+        scrollToX = Math.max(0, scrollToX); // Ensure not scrolling to negative
+        scrollViewRef.current.scrollTo({x: scrollToX, animated: true});
       }
     }, 100);
   }, []);
@@ -72,15 +70,14 @@ const ThoiTietTab = () => {
         {hourlyData.map((item, index) => (
           <View
             key={index}
-            ref={item.time === 'Bây giờ' ? currentHourItemRef : null}
             style={[
               styles.hourlyItem,
-              item.time === 'Bây giờ' && styles.currentHourItem,
+              item.isCurrent && styles.currentHourItem, // Use isCurrent flag
             ]}>
             <Text
               style={[
                 styles.hourlyTime,
-                item.time === 'Bây giờ' && styles.currentHourText,
+                item.isCurrent && styles.currentHourText, // Use isCurrent flag
               ]}>
               {item.time}
             </Text>
@@ -91,14 +88,14 @@ const ThoiTietTab = () => {
             <Text
               style={[
                 styles.hourlyRain,
-                item.time === 'Bây giờ' && styles.currentHourText,
+                item.isCurrent && styles.currentHourText, // Use isCurrent flag
               ]}>
               {item.rain}
             </Text>
             <Text
               style={[
                 styles.hourlyTemp,
-                item.time === 'Bây giờ' && styles.currentHourText,
+                item.isCurrent && styles.currentHourText, // Use isCurrent flag
               ]}>
               {item.temp}
             </Text>
@@ -132,7 +129,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: vw(4.5),
     fontWeight: 'bold',
-    color: '#1F2D54',
+    color: 'white',
     marginLeft: vw(2),
     marginBottom: vh(1),
   },

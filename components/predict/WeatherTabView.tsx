@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1F2D54',
     borderTopLeftRadius: vw(5),
     borderTopRightRadius: vw(5),
+    paddingBottom: vh(8),
   },
   tabContainer: {
     flexDirection: 'row',
@@ -79,11 +80,10 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#E0F0FF', // Light blue background for the content area
     borderTopLeftRadius: vw(5),
     borderTopRightRadius: vw(5),
-    padding: vw(3),
-    marginTop: vh(1), // Space between tabs and content
+    marginTop: vh(1),
+    paddingVertical: vh(2),
   },
 });
 
