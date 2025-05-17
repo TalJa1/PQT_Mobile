@@ -1,9 +1,9 @@
 import {ScrollView, StyleSheet} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {vh} from '../../services/styleProps';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import WeatherDisplay from '../../components/bottomtabs/WeatherDisplay';
+import WeatherTabView from '../../components/predict/WeatherTabView';
 
 const Predict = () => {
   return (
@@ -11,6 +11,7 @@ const Predict = () => {
       <CustomStatusBar barStyle="light-content" backgroundColor={'#56707d'} />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <WeatherDisplay textColor="#FFFFFF" backgroundColor="opacity" />
+        <WeatherTabView />
       </ScrollView>
     </SafeAreaView>
   );
@@ -25,6 +26,5 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     alignItems: 'center',
-    paddingBottom: vh(10),
   },
 });
