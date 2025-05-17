@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react'; // Import useState
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {fakeCautionsData} from '../../services/data'; // Import fakeCautionsData
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import {backIcon, saveIcon} from '../../assets/svgIcon';
+import CheckBox from 'react-native-check-box';
 
 type MustDoItem = {
   title: string;
@@ -26,21 +27,28 @@ type ParamList = {
   };
 };
 
-// Update the route prop type
 type MustDoScreenRouteProp = RouteProp<ParamList, 'MustDo'>;
 
 const MustDoScreen = () => {
   const route = useRoute<MustDoScreenRouteProp>();
   const navigation = useNavigation();
-  const {id} = route.params; // Get id from route params
+  const {id} = route.params;
 
-  // Find the caution data by id
   const cautionData = fakeCautionsData.find(caution => caution.id === id);
 
-  // Placeholder for mustDo data and title - adapt as per your actual data structure
   const mustDoItems: MustDoItem[] = cautionData?.mustDo || [];
   const originalTitle = cautionData?.detailsTitle || 'Kỹ năng ứng phó';
   const screenTitle = `10 việc cần làm khi ${originalTitle}`;
+
+  const [checkedItems, setCheckedItems] = useState<boolean[]>(() =>
+    Array(mustDoItems.length).fill(false)
+  );
+
+  const toggleCheckBox = (index: number) => {
+    const newCheckedItems = [...checkedItems];
+    newCheckedItems[index] = !newCheckedItems[index];
+    setCheckedItems(newCheckedItems);
+  };
 
   if (!cautionData) {
     return (
@@ -72,7 +80,13 @@ const MustDoScreen = () => {
           mustDoItems.map((item, index) => (
             <View key={index} style={styles.itemContainer}>
               <View style={styles.itemHeader}>
-                <Text style={styles.checkbox}>[ ] </Text>
+                <CheckBox
+                  style={styles.checkbox} // Apply style to CheckBox itself if needed for spacing
+                  onClick={() => toggleCheckBox(index)}
+                  isChecked={checkedItems[index]}
+                  checkBoxColor="#1F2D54"
+                  // You can customize other props like checkedCheckBoxColor, uncheckedCheckBoxColor
+                />
                 <Text style={styles.itemTitle}>{item.title}</Text>
               </View>
               <Text style={styles.itemDescription}>{item.description}</Text>
@@ -134,9 +148,8 @@ const styles = StyleSheet.create({
     marginBottom: vh(1),
   },
   checkbox: {
-    fontSize: vw(4.5),
-    color: '#1F2D54',
-    marginRight: vw(2),
+    marginRight: vw(3), // Adjust spacing for the actual checkbox component
+    paddingVertical: vh(1), // Add some padding if the touch area is too small
   },
   itemTitle: {
     fontSize: vw(4.5),
