@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: vh(2),
   },
   hourlyItem: {
-    backgroundColor: '#A9D3FF',
+    backgroundColor: 'rgba(169, 211, 255, 0.6)', // Changed to semi-transparent
     borderRadius: vw(15),
     padding: vw(3),
     alignItems: 'center',
