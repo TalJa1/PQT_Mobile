@@ -27,21 +27,55 @@ const generateHourlyData = () => {
 
 const hourlyData = generateHourlyData();
 
-const dailyData = [
-  {day: 'Ngày mai, 16/5', icon: 'cloudy_rain', temp: '22°'},
-  {day: 'Thứ 3, 17/5', icon: 'sun_cloud', temp: '22°'},
-  {day: 'Thứ 4, 18/5', icon: 'sun_cloud', temp: '22°'},
-  {day: 'Thứ 5, 18/5', icon: 'cloud', temp: '22°'},
-  {day: 'Thứ 5, 18/5', icon: 'cloud', temp: '22°'},
-  {day: 'Thứ 5, 18/5', icon: 'cloud', temp: '22°'},
-  {day: 'Thứ 5, 18/5', icon: 'cloud', temp: '22°'},
-];
+const getDayOfWeekVietnamese = (date: Date) => {
+  const days = [
+    'Chủ Nhật',
+    'Thứ 2',
+    'Thứ 3',
+    'Thứ 4',
+    'Thứ 5',
+    'Thứ 6',
+    'Thứ 7',
+  ];
+  return days[date.getDay()];
+};
+
+const generateDailyData = () => {
+  const data = [];
+  const today = new Date();
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+
+    const dayName = i === 0 ? 'Hôm nay' : getDayOfWeekVietnamese(date);
+    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}`;
+
+    data.push({
+      day: `${dayName}, ${formattedDate}`,
+      // Keep existing icon and temp logic, or replace with dynamic data if available
+      icon:
+        i % 4 === 0
+          ? 'cloudy_rain'
+          : i % 3 === 0
+          ? 'sun_cloud'
+          : i % 5 === 0
+          ? 'rain'
+          : 'cloud', // Example icon logic
+      temp: `${20 + Math.floor(Math.random() * 5)}°`, // Example temp logic
+    });
+  }
+  return data;
+};
+
+const dailyData = generateDailyData();
 
 const iconMap: {[key: string]: any} = {
   sun: require('../../assets/predict/sunAndThunder.png'),
   cloudy_rain: require('../../assets/predict/sunAndRain.png'),
   sun_cloud: require('../../assets/predict/sunAndCloud.png'),
   cloud: require('../../assets/predict/snow.png'),
+  rain: require('../../assets/predict/rain.png'),
 };
 
 const ThoiTietTab = () => {
