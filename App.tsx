@@ -10,6 +10,7 @@ import {homeIcon, menuIcon, predictIcon, reportIcon} from './assets/svgIcon';
 import Predict from './views/bottomtabs/Predict';
 import Abilities from './views/bottomtabs/Abilities';
 import Report from './views/bottomtabs/Report';
+import MustDoScreen from './views/predict/MustDo';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -103,6 +104,12 @@ const App = () => {
         <Stack.Screen
           name="Main"
           component={TabNavigator}
+          options={{headerShown: false}}
+        />
+        {/* others */}
+        <Stack.Screen
+          name="MustDo"
+          component={MustDoScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

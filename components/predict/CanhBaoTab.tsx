@@ -10,6 +10,7 @@ import {
   Image,
   TouchableWithoutFeedback, // Added TouchableWithoutFeedback
 } from 'react-native'; // Added Image
+import {useNavigation} from '@react-navigation/native'; // Added useNavigation
 import {vw, vh} from '../../services/styleProps';
 import {fakeCautionsData, CautionAlert} from '../../services/data';
 import {
@@ -27,6 +28,7 @@ const CanhBaoTab = () => {
     null,
   );
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation(); // Initialize navigation
 
   const handleViewDetails = (caution: CautionAlert) => {
     setSelectedCaution(caution);
@@ -163,6 +165,13 @@ const CanhBaoTab = () => {
                     </View>
                   </View>
                   <TouchableOpacity
+                    onPress={() => {
+                      if (selectedCaution) {
+                        // @ts-ignore
+                        navigation.navigate('MustDo', {id: selectedCaution.id});
+                        setModalVisible(false); // Optionally close the modal
+                      }
+                    }}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
