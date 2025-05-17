@@ -49,29 +49,29 @@ const WeatherTabView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1F2D54', // Dark blue background for the whole tab view area
+    backgroundColor: '#1F2D54',
     borderTopLeftRadius: vw(5),
     borderTopRightRadius: vw(5),
   },
   tabContainer: {
     flexDirection: 'row',
-    paddingHorizontal: vw(5), // Add some horizontal padding for the tabs
-    paddingTop: vh(2), // Add some top padding for the tabs
+    paddingHorizontal: vw(5),
+    paddingTop: vh(2),
+    justifyContent: 'space-evenly',
   },
   tabButton: {
     paddingBottom: vh(1.5),
     paddingHorizontal: vw(5),
     marginHorizontal: vw(1),
-    borderBottomWidth: vw(1),
+    borderBottomWidth: 1,
     borderBottomColor: 'transparent', // Default transparent border
   },
   activeTabButton: {
     borderBottomColor: '#FFFFFF', // White border bottom for active tab
   },
   tabText: {
-    color: '#A9D3FF', // Lighter blue for inactive tab text
-    fontWeight: 'bold',
-    fontSize: vw(4),
+    color: '#EBEBF599', // Lighter blue for inactive tab text
+    fontSize: 15,
     textAlign: 'center',
   },
   activeTabText: {
