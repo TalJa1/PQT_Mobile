@@ -8,6 +8,7 @@ import {
   Modal,
   ScrollView,
   Image,
+  TouchableWithoutFeedback, // Added TouchableWithoutFeedback
 } from 'react-native'; // Added Image
 import {vw, vh} from '../../services/styleProps';
 import {fakeCautionsData, CautionAlert} from '../../services/data';
@@ -85,114 +86,116 @@ const CanhBaoTab = () => {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            {selectedCaution && (
-              <ScrollView contentContainerStyle={styles.modalScrollContainer}>
-                <Text style={styles.modalTitle}>
-                  {selectedCaution.detailsTitle}
-                </Text>
-                <View style={styles.detailItem}>
-                  {stormIconXml(vw(5), vw(5), '#FFFFFF')}
-                  <Text style={styles.modalText}>{selectedCaution.type}</Text>
-                </View>
-                <View style={styles.detailItem}>
-                  {locationIconXml(vw(5), vw(5), '#FFFFFF')}
-                  <Text style={styles.modalText}>{selectedCaution.area}</Text>
-                </View>
-                <View style={styles.detailItem}>
-                  {clockIconXml(vw(5), vw(5), '#FFFFFF')}
-                  <Text style={styles.modalText}>{selectedCaution.time}</Text>
-                </View>
-                {selectedCaution.waveHeight && (
-                  <View style={styles.detailItem}>
-                    {waveIconXml(vw(5), vw(5), '#FFFFFF')}
-                    <Text style={styles.modalText}>
-                      {selectedCaution.waveHeight}
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                // Prevents modal from closing when clicking on the modal content itself
+              }}>
+              <View style={styles.modalContainer}>
+                {selectedCaution && (
+                  <ScrollView contentContainerStyle={styles.modalScrollContainer}>
+                    <Text style={styles.modalTitle}>
+                      {selectedCaution.detailsTitle}
                     </Text>
-                  </View>
+                    <View style={styles.detailItem}>
+                      {stormIconXml(vw(5), vw(5), '#FFFFFF')}
+                      <Text style={styles.modalText}>{selectedCaution.type}</Text>
+                    </View>
+                    <View style={styles.detailItem}>
+                      {locationIconXml(vw(5), vw(5), '#FFFFFF')}
+                      <Text style={styles.modalText}>{selectedCaution.area}</Text>
+                    </View>
+                    <View style={styles.detailItem}>
+                      {clockIconXml(vw(5), vw(5), '#FFFFFF')}
+                      <Text style={styles.modalText}>{selectedCaution.time}</Text>
+                    </View>
+                    {selectedCaution.waveHeight && (
+                      <View style={styles.detailItem}>
+                        {waveIconXml(vw(5), vw(5), '#FFFFFF')}
+                        <Text style={styles.modalText}>
+                          {selectedCaution.waveHeight}
+                        </Text>
+                      </View>
+                    )}
+                    {selectedCaution.wind && (
+                      <View style={styles.detailItem}>
+                        {windIconXml(vw(5), vw(5), '#FFFFFF')}
+                        <Text style={styles.modalText}>{selectedCaution.wind}</Text>
+                      </View>
+                    )}
+                    {selectedCaution.rainAmount && (
+                      <View style={styles.detailItem}>
+                        {rainIconXml(vw(5), vw(5), '#FFFFFF')}
+                        <Text style={styles.modalText}>
+                          {selectedCaution.rainAmount}
+                        </Text>
+                      </View>
+                    )}
+                    {selectedCaution.direction && (
+                      <View style={styles.detailItem}>
+                        {directionIconXml(vw(5), vw(5), '#FFFFFF')}
+                        <Text style={styles.modalText}>
+                          {selectedCaution.direction}
+                        </Text>
+                      </View>
+                    )}
+                  </ScrollView>
                 )}
-                {selectedCaution.wind && (
-                  <View style={styles.detailItem}>
-                    {windIconXml(vw(5), vw(5), '#FFFFFF')}
-                    <Text style={styles.modalText}>{selectedCaution.wind}</Text>
-                  </View>
-                )}
-                {selectedCaution.rainAmount && (
-                  <View style={styles.detailItem}>
-                    {rainIconXml(vw(5), vw(5), '#FFFFFF')}
-                    <Text style={styles.modalText}>
-                      {selectedCaution.rainAmount}
+                <View style={styles.ButtonBottomGroup}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: vh(2),
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{fontSize: 14, fontWeight: 700, color: '#1F2D54'}}>
+                      Mức độ nguy hiểm:{' '}
                     </Text>
+                    <View
+                      style={[
+                        styles.dangerLevelCircle,
+                        {backgroundColor: '#1F2D54'},
+                      ]}>
+                      <Text style={[styles.dangerLevelNumber, {color: '#FFA500'}]}>
+                        {selectedCaution?.dangerLevel}
+                      </Text>
+                    </View>
                   </View>
-                )}
-                {selectedCaution.direction && (
-                  <View style={styles.detailItem}>
-                    {directionIconXml(vw(5), vw(5), '#FFFFFF')}
-                    <Text style={styles.modalText}>
-                      {selectedCaution.direction}
+                  <TouchableOpacity
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      borderColor: '#1F2D54',
+                      borderWidth: 1,
+                      borderRadius: 15,
+                      paddingVertical: vh(1),
+                      paddingHorizontal: vw(4),
+                      marginTop: vh(2),
+                    }}>
+                    <Text
+                      style={{
+                        color: '#1F2D54',
+                        fontWeight: 'bold',
+                        fontSize: vw(4),
+                        marginRight: vw(2),
+                      }}>
+                      Xem kỹ năng ứng phó với bão
                     </Text>
-                  </View>
-                )}
-              </ScrollView>
-            )}
-            <View style={styles.ButtonBottomGroup}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: vh(2),
-                  alignItems: 'center',
-                }}>
-                <Text style={{fontSize: 14, fontWeight: 700, color: '#1F2D54'}}>
-                  Mức độ nguy hiểm:{' '}
-                </Text>
-                <View
-                  style={[
-                    styles.dangerLevelCircle,
-                    {backgroundColor: '#1F2D54'},
-                  ]}>
-                  <Text style={[styles.dangerLevelNumber, {color: '#FFA500'}]}>
-                    {selectedCaution?.dangerLevel}
-                  </Text>
+                    <Text
+                      style={{
+                        color: '#1F2D54',
+                        fontSize: vw(5),
+                        fontWeight: 'bold',
+                      }}>
+                      &gt;
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-                <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderColor: '#1F2D54',
-                  borderWidth: 1,
-                  borderRadius: 15,
-                  paddingVertical: vh(1),
-                  paddingHorizontal: vw(4),
-                  marginTop: vh(2),
-                }}>
-                <Text
-                  style={{
-                  color: '#1F2D54',
-                  fontWeight: 'bold',
-                  fontSize: vw(4),
-                  marginRight: vw(2),
-                  }}>
-                  Xem kỹ năng ứng phó với bão
-                </Text>
-                <Text
-                  style={{
-                  color: '#1F2D54',
-                  fontSize: vw(5),
-                  fontWeight: 'bold',
-                  }}>
-                  &gt;
-                </Text>
-                </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}>
-                <Text style={styles.closeButtonText}>Đóng</Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -322,22 +325,11 @@ const styles = StyleSheet.create({
     marginLeft: vw(2),
     flexShrink: 1,
   },
-  closeButton: {
-    backgroundColor: '#FFA500',
-    borderRadius: vw(3),
-    paddingVertical: vh(1.5),
-    alignItems: 'center',
-    marginTop: vh(2),
-  },
-  closeButtonText: {
-    fontSize: vw(4.2),
-    fontWeight: 'bold',
-    color: '#1F2D54',
-  },
   ButtonBottomGroup: {
     flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: '#FFAC33',
+    paddingBottom: vh(2),
   },
   modalScrollContainer: {
     padding: vw(5),
