@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import {vw, vh} from '../../services/styleProps';
@@ -103,20 +104,27 @@ const ThoiTietTab = () => {
         ))}
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>7 ngày tới</Text>
-      <View style={styles.dailyForecastContainer}>
-        {dailyData.map((item, index) => (
-          <View key={index} style={styles.dailyItem}>
-            <Image
-              source={iconMap[item.icon]}
-              style={styles.weatherIconLarge}
-            />
-            <View style={styles.dailyTextContainer}>
-              <Text style={styles.dailyTemp}>{item.temp}</Text>
-              <Text style={styles.dailyDay}>{item.day}</Text>
+      <View style={styles.next7daysContainer}>
+        <Text style={[styles.sectionTitle, {color: '#1F2D54'}]}>
+          7 ngày tới
+        </Text>
+        <View>
+          {dailyData.map((item, index) => (
+            <View key={index} style={styles.dailyItem}>
+              <View style={styles.weatherIconLargeCircle}>
+                <Image
+                  source={iconMap[item.icon]}
+                  style={styles.weatherIconLarge}
+                />
+              </View>
+              <View style={{width: vw(5)}} />
+              <View style={styles.dailyTextContainer}>
+                <Text style={styles.dailyTemp}>{item.temp}</Text>
+                <Text style={styles.dailyDay}>{item.day}</Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
     </ScrollView>
   );
@@ -172,32 +180,36 @@ const styles = StyleSheet.create({
     color: '#1F2D54',
     marginTop: vh(0.5),
   },
-  dailyForecastContainer: {
-    // backgroundColor: '#FFFFFF', // White background for the 7-day forecast area
-    // borderRadius: vw(5),
-    // padding: vw(3),
+  next7daysContainer: {
+    backgroundColor: '#A9D3FF',
+    borderRadius: vw(5),
+    marginHorizontal: vw(2),
+    padding: vw(2),
   },
   dailyItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#C9E5FF', // Light blue for each daily item background
-    borderRadius: vw(20),
     paddingHorizontal: vw(5),
     paddingVertical: vh(1.5),
-    marginBottom: vh(1),
+  },
+  weatherIconLargeCircle: {
+    backgroundColor: '#1F2D54',
+    borderRadius: vw(20),
+    padding: vw(2),
   },
   weatherIconLarge: {
     width: vw(12),
     height: vw(12),
-    marginRight: vw(4),
-    backgroundColor: '#1F2D54', // Dark blue circle background for icon
-    borderRadius: vw(6),
   },
   dailyTextContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
+    borderWidth: 1,
+    height: '100%',
+    borderColor: '#1F2D54',
+    borderRadius: 100,
   },
   dailyTemp: {
     fontSize: vw(5),
