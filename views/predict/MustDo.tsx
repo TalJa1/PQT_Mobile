@@ -1,11 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {RouteProp, useRoute, useNavigation} from '@react-navigation/native';
 import {vw, vh} from '../../services/styleProps';
 import {fakeCautionsData} from '../../services/data'; // Import fakeCautionsData
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
+import {backIcon, saveIcon} from '../../assets/svgIcon';
 
 type MustDoItem = {
   title: string;
@@ -15,7 +22,6 @@ type MustDoItem = {
 // Define the type for the route params
 type ParamList = {
   MustDo: {
-    // Changed from MustDoDetail to MustDo to match navigation
     id: string; // Expect an id
   };
 };
@@ -25,6 +31,7 @@ type MustDoScreenRouteProp = RouteProp<ParamList, 'MustDo'>;
 
 const MustDoScreen = () => {
   const route = useRoute<MustDoScreenRouteProp>();
+  const navigation = useNavigation();
   const {id} = route.params; // Get id from route params
 
   // Find the caution data by id
@@ -44,8 +51,21 @@ const MustDoScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
       <CustomStatusBar backgroundColor="white" barStyle={'dark-content'} />
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.headerButtonLeft}>
+          {backIcon(vw(7), vw(7), '#1F2D54')}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => console.log('Lưu bài viết pressed')}
+          style={styles.headerButtonRight}>
+          {saveIcon(vw(7), vw(7), '#1F2D54')}
+          <Text style={styles.headerButtonText}>Lưu bài viết</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView style={styles.container}>
         <Text style={styles.headerTitle}>{screenTitle}</Text>
         {mustDoItems.length > 0 ? (
@@ -71,20 +91,41 @@ const MustDoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: vw(5),
-    backgroundColor: '#FFFFFF', // Changed background to white
+    paddingHorizontal: vw(5),
+    backgroundColor: '#FFFFFF',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: vw(5),
+    paddingTop: vh(2),
+    paddingBottom: vh(1),
+    backgroundColor: '#FFFFFF',
+  },
+  headerButtonLeft: {
+    // Styles for left button
+  },
+  headerButtonRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerButtonText: {
+    color: '#1F2D54',
+    fontSize: vw(4),
+    fontWeight: 'bold',
   },
   headerTitle: {
     fontSize: vw(6),
     fontWeight: 'bold',
-    color: '#1F2D54', // Changed text color for white background
+    color: '#1F2D54',
     textAlign: 'center',
     marginBottom: vh(3),
   },
   itemContainer: {
     marginBottom: vh(2.5),
     padding: vw(4),
-    backgroundColor: '#F0F0F0', // Light gray background for items for contrast
+    backgroundColor: '#F0F0F0',
     borderRadius: vw(2),
   },
   itemHeader: {
@@ -94,23 +135,23 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     fontSize: vw(4.5),
-    color: '#1F2D54', // Changed text color
+    color: '#1F2D54',
     marginRight: vw(2),
   },
   itemTitle: {
     fontSize: vw(4.5),
     fontWeight: 'bold',
-    color: '#1F2D54', // Changed text color
-    flexShrink: 1, // Allow title to wrap if long
+    color: '#1F2D54',
+    flexShrink: 1,
   },
   itemDescription: {
     fontSize: vw(3.8),
-    color: '#333333', // Changed text color
+    color: '#333333',
     lineHeight: vh(3),
   },
   noItemsText: {
-    textAlign: 'center', // Keep centered for this specific text
-    color: '#555555', // Slightly different color for emphasis
+    textAlign: 'center',
+    color: '#555555',
   },
 });
 
