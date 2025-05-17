@@ -4,9 +4,13 @@ import {vw, vh} from '../../services/styleProps'; // Adjust path as necessary
 
 interface WeatherDisplayProps {
   textColor: string;
+  backgroundColor: string;
 }
 
-const WeatherDisplay: React.FC<WeatherDisplayProps> = ({textColor}) => {
+const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
+  textColor,
+  backgroundColor,
+}) => {
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1;
@@ -54,7 +58,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({textColor}) => {
   });
 
   return (
-    <View style={styles.upperSection}>
+    <View style={[styles.upperSection, {backgroundColor: backgroundColor}]}>
       <Text style={dynamicStyles.dateText}>{displayDate}</Text>
 
       <View style={styles.weatherSection}>
@@ -99,7 +103,6 @@ const styles = StyleSheet.create({
   upperSection: {
     width: '100%',
     alignItems: 'center',
-    backgroundColor: '#C9E5FF',
     paddingVertical: vh(4),
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,

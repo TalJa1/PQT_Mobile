@@ -11,7 +11,7 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <CustomStatusBar barStyle="dark-content" backgroundColor={'#C9E5FF'} />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <WeatherDisplay textColor="#1F2D54" />
+        <WeatherDisplay textColor="#1F2D54" backgroundColor="#C9E5FF" />
         <AdditionalInfo />
       </ScrollView>
     </SafeAreaView>
