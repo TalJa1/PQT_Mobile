@@ -48,9 +48,9 @@ const Abilities = () => {
                   justifyContent: 'space-between',
                 }}>
                 <Text style={styles.cardViews}>124 lưu</Text>
-                <View style={styles.saveIconContainer}>
+                <TouchableOpacity style={styles.saveIconContainer}>
                   {saveIcon2(24, 24, '#000')}
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
             <Image
