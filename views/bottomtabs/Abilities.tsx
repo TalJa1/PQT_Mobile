@@ -40,7 +40,13 @@ const Abilities = () => {
               <Text style={styles.cardTitle}>
                 5 việc cần làm sau {typeItem.type}
               </Text>
-              <View style={{flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  width: '100%',
+                  justifyContent: 'space-between',
+                }}>
                 <Text style={styles.cardViews}>124 lưu</Text>
                 <View style={styles.saveIconContainer}>
                   {saveIcon2(24, 24, '#000')}
