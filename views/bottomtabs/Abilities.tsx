@@ -10,12 +10,14 @@ import {
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
-import {fakeCautionsData} from '../../services/data';
+import {fakeCautionsData, thienTaiData} from '../../services/data';
 import {saveIcon2} from '../../assets/svgIcon';
 import {vw} from '../../services/styleProps';
 
+const tabTitles = ['Bão', 'Lũ', 'Cháy rừng', 'Sạt lở', 'Hạn hán'];
+
 const Abilities = () => {
-  const [selectedTab, setSelectedTab] = useState(fakeCautionsData[0].type);
+  const [selectedTab, setSelectedTab] = useState(tabTitles[0]);
 
   const renderCards = () => {
     const allTypes = fakeCautionsData;
@@ -63,6 +65,24 @@ const Abilities = () => {
     );
   };
 
+  const renderTabData = () => {
+    const selectedData = thienTaiData.find(item => item.name === selectedTab);
+    if (!selectedData) {
+      return null;
+    }
+
+    return (
+      <View style={styles.tabDataContainer}>
+        {selectedData.actions.map((action, index) => (
+          <View key={index} style={styles.actionItem}>
+            <Text style={styles.actionTitle}>{action.title}</Text>
+            <Text style={styles.actionDescription}>{action.description}</Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <CustomStatusBar backgroundColor="#C9E5FF" barStyle={'dark-content'} />
@@ -74,25 +94,27 @@ const Abilities = () => {
           <Text style={styles.subHeaderTitle}>Dành cho bạn</Text>
         </View>
         {renderCards()}
-        <View style={styles.tabsContainer}>
-          {fakeCautionsData.map(item => (
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.tabsContainer}
+          contentContainerStyle={styles.tabsContentContainer}>
+          {tabTitles.map(title => (
             <TouchableOpacity
-              key={item.id}
-              style={[
-                styles.tab,
-                selectedTab === item.type && styles.selectedTab,
-              ]}
-              onPress={() => setSelectedTab(item.type)}>
+              key={title}
+              style={[styles.tab, selectedTab === title && styles.selectedTab]}
+              onPress={() => setSelectedTab(title)}>
               <Text
                 style={[
                   styles.tabText,
-                  selectedTab === item.type && styles.selectedTabText,
+                  selectedTab === title && styles.selectedTabText,
                 ]}>
-                {item.type.split(' ')[0]}
+                {title}
               </Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
+        {renderTabData()}
       </ScrollView>
     </SafeAreaView>
   );
@@ -172,18 +194,19 @@ const styles = StyleSheet.create({
   saveIconContainer: {},
   tabsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     paddingVertical: 10,
-    paddingHorizontal: 20,
     backgroundColor: '#C9E5FF',
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
+  },
+  tabsContentContainer: {
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
   tab: {
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 20,
     backgroundColor: '#E0EFFF',
+    marginRight: 10,
   },
   selectedTab: {
     backgroundColor: '#007AFF',
@@ -195,5 +218,30 @@ const styles = StyleSheet.create({
   },
   selectedTabText: {
     color: '#fff',
+  },
+  tabDataContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  actionItem: {
+    marginBottom: 15,
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+  },
+  actionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 5,
+  },
+  actionDescription: {
+    fontSize: 14,
+    color: '#333',
   },
 });

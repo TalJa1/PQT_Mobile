@@ -197,3 +197,288 @@ export const fakeCautionsData: CautionAlert[] = [
     ],
   },
 ];
+
+interface Action {
+  title: string;
+  description: string;
+}
+
+interface ThienTai {
+  id: number;
+  name: string;
+  actions: Action[];
+}
+
+export const thienTaiData: ThienTai[] = [
+  {
+    id: 1,
+    name: 'Bão',
+    actions: [
+      {
+        title: 'Theo dõi dự báo thời tiết',
+        description:
+          'Cập nhật thường xuyên các bản tin dự báo thời tiết để nắm bắt thông tin về bão.',
+      },
+      {
+        title: 'Gia cố nhà cửa',
+        description:
+          'Chằng chống mái tôn, cửa ra vào và cửa sổ để tránh bị tốc mái, hư hỏng.',
+      },
+      {
+        title: 'Cắt tỉa cây cối',
+        description:
+          'Loại bỏ cành cây lớn, cây yếu gần nhà để phòng tránh đổ gãy gây nguy hiểm.',
+      },
+      {
+        title: 'Chuẩn bị đồ dùng khẩn cấp',
+        description:
+          'Sẵn sàng đèn pin, nến, nước uống đóng chai và đồ ăn khô dự trữ.',
+      },
+      {
+        title: 'Bảo vệ tài sản',
+        description:
+          'Di chuyển đồ đạc, tài sản có giá trị lên khu vực cao ráo, tránh ngập lụt.',
+      },
+      {
+        title: 'Ngắt thiết bị điện',
+        description:
+          'Tắt các thiết bị điện khi có mưa bão lớn để tránh chập cháy.',
+      },
+      {
+        title: 'Tìm nơi trú ẩn an toàn',
+        description: 'Di chuyển đến nơi trú ẩn kiên cố khi bão đổ bộ.',
+      },
+      {
+        title: 'Không ra ngoài khi bão',
+        description:
+          'Tuyệt đối không đi ra ngoài trong thời gian bão đang diễn ra.',
+      },
+      {
+        title: 'Liên hệ cứu hộ',
+        description:
+          'Thông báo ngay cho chính quyền địa phương nếu cần sự hỗ trợ cứu hộ.',
+      },
+      {
+        title: 'Khắc phục sau bão',
+        description:
+          'Kiểm tra và tiến hành sửa chữa những thiệt hại sau khi bão tan.',
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Lũ',
+    actions: [
+      {
+        title: 'Cập nhật cảnh báo lũ',
+        description:
+          'Theo dõi sát sao các thông tin cảnh báo lũ từ cơ quan chức năng.',
+      },
+      {
+        title: 'Sơ tán khẩn cấp',
+        description:
+          'Di chuyển người và tài sản đến vùng đất cao, an toàn khi có lệnh hoặc nguy cơ lũ.',
+      },
+      {
+        title: 'Ngắt nguồn điện',
+        description:
+          'Tắt cầu dao điện để phòng tránh tai nạn điện giật do ngập nước.',
+      },
+      {
+        title: 'Không lội nước nguy hiểm',
+        description: 'Tuyệt đối không cố gắng đi qua vùng nước chảy xiết.',
+      },
+      {
+        title: 'Chuẩn bị phương tiện cứu sinh',
+        description: 'Sẵn sàng thuyền, phao cứu sinh (nếu có điều kiện).',
+      },
+      {
+        title: 'Dự trữ nhu yếu phẩm',
+        description:
+          'Chuẩn bị nước uống, lương thực khô và thuốc men cần thiết.',
+      },
+      {
+        title: 'Giữ liên lạc',
+        description:
+          'Duy trì liên lạc với chính quyền địa phương để nhận thông tin và hỗ trợ.',
+      },
+      {
+        title: 'Tuân thủ sơ tán',
+        description:
+          'Thực hiện nghiêm túc hướng dẫn sơ tán của lực lượng cứu hộ.',
+      },
+      {
+        title: 'Vệ sinh sau lũ',
+        description:
+          'Kiểm tra và đảm bảo vệ sinh nguồn nước, thực phẩm sau khi lũ rút.',
+      },
+      {
+        title: 'Ổn định cuộc sống',
+        description:
+          'Tham gia vào công tác khôi phục nhà cửa và ổn định cuộc sống sau lũ.',
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Cháy rừng',
+    actions: [
+      {
+        title: 'Nâng cao ý thức phòng cháy',
+        description:
+          'Tuyên truyền và thực hiện nghiêm các quy định về phòng cháy chữa cháy rừng.',
+      },
+      {
+        title: 'Không gây cháy',
+        description:
+          'Tuyệt đối không đốt lửa, vứt tàn thuốc bừa bãi trong hoặc gần khu vực rừng.',
+      },
+      {
+        title: 'Báo cháy kịp thời',
+        description:
+          'Thông báo ngay lập tức cho cơ quan chức năng khi phát hiện đám cháy rừng.',
+      },
+      {
+        title: 'Tham gia chữa cháy (nếu có)',
+        description:
+          'Hỗ trợ lực lượng chữa cháy rừng nếu được huy động và có kỹ năng phù hợp.',
+      },
+      {
+        title: 'Sơ tán khỏi vùng nguy hiểm',
+        description:
+          'Nhanh chóng di chuyển người và tài sản ra khỏi khu vực có nguy cơ cháy lan.',
+      },
+      {
+        title: 'Bảo vệ hô hấp',
+        description:
+          'Che chắn mặt và cơ thể bằng vải ướt để tránh hít phải khói bụi.',
+      },
+      {
+        title: 'Di chuyển theo hướng an toàn',
+        description:
+          'Di chuyển theo hướng ngược gió để tránh bị ngạt khói và lửa.',
+      },
+      {
+        title: 'Tìm nguồn nước dập lửa',
+        description:
+          'Sử dụng nguồn nước gần nhất để dập lửa hoặc làm ướt quần áo bảo vệ.',
+      },
+      {
+        title: 'Gọi cấp cứu khi bị thương',
+        description:
+          'Liên hệ ngay với dịch vụ cấp cứu nếu có người bị thương do cháy.',
+      },
+      {
+        title: 'Hợp tác khắc phục',
+        description:
+          'Phối hợp với các lực lượng chức năng trong công tác chữa cháy và xử lý hậu quả.',
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: 'Sạt lở',
+    actions: [
+      {
+        title: 'Quan sát dấu hiệu sạt lở',
+        description:
+          'Chú ý theo dõi các vết nứt trên đất, tường, hiện tượng cây nghiêng bất thường.',
+      },
+      {
+        title: 'Sơ tán lập tức',
+        description:
+          'Di chuyển ngay đến nơi an toàn khi phát hiện nguy cơ sạt lở.',
+      },
+      {
+        title: 'Tránh xa khu vực nguy hiểm',
+        description: 'Không đến gần các khu vực có nguy cơ sạt lở cao.',
+      },
+      {
+        title: 'Báo cáo chính quyền',
+        description:
+          'Thông báo cho chính quyền địa phương về tình hình sạt lở hoặc nguy cơ sạt lở.',
+      },
+      {
+        title: 'Không xây dựng nơi nguy hiểm',
+        description:
+          'Tránh xây dựng nhà cửa ở khu vực có địa chất yếu, dễ sạt lở.',
+      },
+      {
+        title: 'Gia cố phòng ngừa',
+        description:
+          'Thực hiện các biện pháp gia cố tại các khu vực có nguy cơ sạt lở (nếu có thể).',
+      },
+      {
+        title: 'Chuẩn bị cứu hộ cơ bản',
+        description:
+          'Sẵn sàng các vật dụng cứu hộ cần thiết như dây thừng, đèn pin.',
+      },
+      {
+        title: 'Tìm nơi trú ẩn an toàn',
+        description: 'Di chuyển đến nơi trú ẩn vững chắc khi sạt lở xảy ra.',
+      },
+      {
+        title: 'Cảnh giác sạt lở thứ cấp',
+        description: 'Đề phòng các đợt sạt lở tiếp theo sau mưa lớn kéo dài.',
+      },
+      {
+        title: 'Hợp tác khắc phục hậu quả',
+        description:
+          'Tham gia vào các hoạt động khắc phục hậu quả sạt lở do chính quyền tổ chức.',
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: 'Hạn hán',
+    actions: [
+      {
+        title: 'Tiết kiệm nước',
+        description:
+          'Sử dụng nước một cách hợp lý và tiết kiệm trong sinh hoạt hàng ngày.',
+      },
+      {
+        title: 'Tích trữ nước',
+        description: 'Chủ động tích trữ nước sạch khi có điều kiện.',
+      },
+      {
+        title: 'Tìm kiếm nguồn nước khác',
+        description: 'Tìm kiếm và khai thác các nguồn nước thay thế (nếu có).',
+      },
+      {
+        title: 'Ưu tiên nước sinh hoạt',
+        description:
+          'Đảm bảo ưu tiên nguồn nước cho các nhu cầu sinh hoạt thiết yếu.',
+      },
+      {
+        title: 'Theo dõi thông tin hạn hán',
+        description:
+          'Cập nhật thường xuyên thông tin về tình hình hạn hán từ các cơ quan chức năng.',
+      },
+      {
+        title: 'Điều chỉnh canh tác',
+        description:
+          'Thay đổi lịch gieo trồng và lựa chọn cây trồng phù hợp với điều kiện khô hạn.',
+      },
+      {
+        title: 'Chăm sóc cây trồng, vật nuôi',
+        description:
+          'Áp dụng các biện pháp chăm sóc đặc biệt để giảm thiểu thiệt hại cho cây trồng và vật nuôi.',
+      },
+      {
+        title: 'Báo cáo tình hình thiếu nước',
+        description:
+          'Thông báo cho chính quyền địa phương về tình trạng thiếu nước.',
+      },
+      {
+        title: 'Hỗ trợ cộng đồng',
+        description:
+          'Tham gia các hoạt động hỗ trợ người dân bị ảnh hưởng bởi hạn hán.',
+      },
+      {
+        title: 'Áp dụng biện pháp chống hạn lâu dài',
+        description: 'Tìm hiểu và thực hiện các giải pháp chống hạn bền vững.',
+      },
+    ],
+  },
+];
