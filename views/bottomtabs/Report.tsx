@@ -6,25 +6,24 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import {PostsData, Post} from '../../services/data';
 import {vh} from '../../services/styleProps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Image sources mapping for local assets
 const imageSources = {
   avatar: require('../../assets/report/avatar.png'),
   drought: require('../../assets/report/drought.jpg'),
   flood: require('../../assets/report/flood.jpg'),
   earthquake: require('../../assets/report/earthquake.jpg'),
-  // Add other specific images from PostsData if they exist and are used
 };
 
 const getPostImageSource = (imagePath: string | undefined) => {
   if (!imagePath) {
     return imageSources.drought;
-  } // Default or placeholder
+  }
   if (imagePath === 'assets/report/drought.jpg') {
     return imageSources.drought;
   }
@@ -34,10 +33,29 @@ const getPostImageSource = (imagePath: string | undefined) => {
   if (imagePath === 'assets/report/earthquake.jpg') {
     return imageSources.earthquake;
   }
-  return imageSources.drought; // Fallback for any other unmapped images
+  return imageSources.drought;
 };
 
 const Report = () => {
+  const [renderData, setRenderData] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const storeAndLoadPosts = async () => {
+      try {
+        await AsyncStorage.setItem('posts', JSON.stringify(PostsData));
+        const storedPosts = await AsyncStorage.getItem('posts');
+        if (storedPosts) {
+          setRenderData(JSON.parse(storedPosts));
+        } else {
+          setRenderData(PostsData);
+        }
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
+    };
+    storeAndLoadPosts();
+  }, []);
+
   const extractTime = (dateTimeStr: string | undefined) => {
     if (!dateTimeStr) {
       return 'N/A';
@@ -82,7 +100,7 @@ const Report = () => {
         </View>
 
         <View style={styles.postsListContainer}>
-          {PostsData.map((post: Post) => (
+          {renderData.map((post: Post) => (
             <View key={post.id} style={styles.postCard}>
               <View style={styles.postHeader}>
                 <Image source={imageSources.avatar} style={styles.avatar} />
