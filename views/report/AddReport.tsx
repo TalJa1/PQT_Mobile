@@ -101,7 +101,7 @@ const AddReport = () => {
           <TouchableOpacity
             onPress={handleTakePhoto}
             style={styles.captureButton}>
-            <Text style={styles.captureButtonText}>SNAP</Text>
+            {/* Component */}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setShowCamera(false)}
@@ -258,7 +258,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   captureButton: {
-    // Style for capture button
     backgroundColor: '#fff',
     borderRadius: 35,
     padding: 15,
@@ -266,11 +265,8 @@ const styles = StyleSheet.create({
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  captureButtonText: {
-    // Style for capture button text
-    fontSize: 14,
-    color: '#000',
+    borderWidth: 2, // Added border
+    borderColor: '#666', // Added border color
   },
   closeButton: {
     // Style for close button
