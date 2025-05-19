@@ -11,6 +11,16 @@ export const test = (w?: any, h?: any, color?: any) => {
   return <SvgXml xml={xml} width={w} height={h} />;
 };
 
+export const cameraIcon = (w?: any, h?: any, color?: any) => {
+  const xml = `<svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M35.5 21.6666C35.5 17.2222 34.6667 13.3333 33.8333 12.7778C33.2992 12.4217 30.7114 12.0656 27.1667 11.8558C25.1805 11.7383 28.8333 8.33331 20.5 8.33331C12.1667 8.33331 15.8195 11.7383 13.8333 11.8558C10.2886 12.0656 7.70075 12.4217 7.16667 12.7778C6.33333 13.3333 5.5 17.2222 5.5 21.6666C5.5 26.1111 6.33333 30 7.16667 30.5555C8 31.1111 13.8333 31.6666 20.5 31.6666C27.1667 31.6666 33 31.1111 33.8333 30.5555C34.6667 30 35.5 26.1111 35.5 21.6666Z" stroke="#969696" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.5 26.6666C23.2614 26.6666 25.5 24.4281 25.5 21.6666C25.5 18.9052 23.2614 16.6666 20.5 16.6666C17.7386 16.6666 15.5 18.9052 15.5 21.6666C15.5 24.4281 17.7386 26.6666 20.5 26.6666Z" stroke="#969696" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
+
+  return <SvgXml xml={xml} width={w} height={h} />;
+};
+
 export const saveIcon2 = (w?: any, h?: any, color?: any) => {
   const xml = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_9_4484)">

@@ -11,6 +11,7 @@ import Predict from './views/bottomtabs/Predict';
 import Abilities from './views/bottomtabs/Abilities';
 import Report from './views/bottomtabs/Report';
 import MustDoScreen from './views/predict/MustDo';
+import AddReport from './views/report/AddReport';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -110,6 +111,11 @@ const App = () => {
         <Stack.Screen
           name="MustDo"
           component={MustDoScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddReport"
+          component={AddReport}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

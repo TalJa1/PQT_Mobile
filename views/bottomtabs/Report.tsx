@@ -12,6 +12,7 @@ import CustomStatusBar from '../../components/CustomStatusBar';
 import {PostsData, Post} from '../../services/data';
 import {vh} from '../../services/styleProps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 const imageSources = {
   avatar: require('../../assets/report/avatar.png'),
@@ -38,6 +39,7 @@ const getPostImageSource = (imagePath: string | undefined) => {
 
 const Report = () => {
   const [renderData, setRenderData] = useState<Post[]>([]);
+  const navigate = useNavigation();
 
   useEffect(() => {
     const storeAndLoadPosts = async () => {
@@ -82,12 +84,18 @@ const Report = () => {
     return location.split(',')[0];
   };
 
+  const handlePressAddReport = () => {
+    navigate.navigate('AddReport' as never);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <CustomStatusBar backgroundColor="#fff" barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.scrollContentContainer}>
         <View style={styles.sendAlertOuterContainer}>
-          <TouchableOpacity style={styles.sendAlertButton}>
+          <TouchableOpacity
+            style={styles.sendAlertButton}
+            onPress={handlePressAddReport}>
             <View style={styles.plusIconContainer}>
               <Text style={styles.plusIcon}>+</Text>
             </View>
