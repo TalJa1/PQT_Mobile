@@ -26,20 +26,20 @@ const tabTitles = [
 ];
 
 const Abilities = () => {
-  const [selectedTab, setSelectedTab] = useState(tabTitles[0]);
+  const [selectedTabId, setSelectedTabId] = useState(tabTitles[0].id);
   const [tabDetailData, setTabDetailData] = useState<Action[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (selectedTab && selectedTab.id) {
+    if (selectedTabId) {
       const fetchTabData = async () => {
         setLoading(true);
         setError(null);
         setTabDetailData(null);
         try {
           const disasterDetails: Dissater = await disasterAPI.getById(
-            selectedTab.id,
+            selectedTabId,
           );
           console.log('Disaster Details:', disasterDetails);
 
@@ -57,7 +57,7 @@ const Abilities = () => {
       };
       fetchTabData();
     }
-  }, [selectedTab]);
+  }, [selectedTabId]);
 
   const renderCards = () => {
     const allTypes = fakeCautionsData;
@@ -162,12 +162,15 @@ const Abilities = () => {
           {tabTitles.map(title => (
             <TouchableOpacity
               key={title.id}
-              style={[styles.tab, selectedTab === title && styles.selectedTab]}
-              onPress={() => setSelectedTab(title)}>
+              style={[
+                styles.tab,
+                selectedTabId === title.id && styles.selectedTab,
+              ]}
+              onPress={() => setSelectedTabId(title.id)}>
               <Text
                 style={[
                   styles.tabText,
-                  selectedTab === title && styles.selectedTabText,
+                  selectedTabId === title.id && styles.selectedTabText,
                 ]}>
                 {title.title}
               </Text>
