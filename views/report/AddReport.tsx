@@ -14,7 +14,11 @@ import CustomStatusBar from '../../components/CustomStatusBar';
 import {useNavigation} from '@react-navigation/native';
 import {backIcon, cameraIcon} from '../../assets/svgIcon';
 import {vw} from '../../services/styleProps';
-import {RNCamera} from 'react-native-camera'; // Import RNCamera
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+} from 'react-native-vision-camera'; // Import Camera from react-native-vision-camera
 
 const AddReport = () => {
   const navigation = useNavigation();
@@ -22,7 +26,9 @@ const AddReport = () => {
   const [time, setTime] = useState('');
   const [showCamera, setShowCamera] = useState(false); // State for camera visibility
   const [imageUri, setImageUri] = useState<string | null>(null); // State for captured image URI
-  const cameraRef = useRef<RNCamera | null>(null); // Ref for RNCamera
+  const cameraRef = useRef<Camera | null>(null); // Ref for Camera
+  const device = useCameraDevice('back');
+  const {hasPermission, requestPermission} = useCameraPermission();
 
   useEffect(() => {
     const today = new Date();
@@ -32,16 +38,24 @@ const AddReport = () => {
     setTime(`${day}/${month}/${year}`);
   }, []);
 
+  useEffect(() => {
+    if (showCamera && !hasPermission) {
+      requestPermission();
+    }
+  }, [showCamera, hasPermission, requestPermission]);
+
   const handleSubmit = () => {
     console.log('Report Submitted', {description, time, imageUri}); // Added imageUri to log
   };
 
   const handleTakePhoto = async () => {
     if (cameraRef.current) {
-      const options = {quality: 0.5, base64: true};
       try {
-        const data = await cameraRef.current.takePictureAsync(options);
-        setImageUri(data.uri);
+        const photo = await cameraRef.current.takePhoto({
+          flash: 'off',
+          enableShutterSound: false,
+        });
+        setImageUri('file://' + photo.path);
         setShowCamera(false); // Hide camera after taking photo
       } catch (error) {
         console.error('Failed to take picture', error);
@@ -51,6 +65,23 @@ const AddReport = () => {
   };
 
   if (showCamera) {
+    if (!hasPermission) {
+      return (
+        <View style={styles.container}>
+          <Text>Camera permission is required.</Text>
+          <TouchableOpacity onPress={requestPermission}>
+            <Text>Grant Permission</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    if (!device) {
+      return (
+        <View style={styles.container}>
+          <Text>No camera device found.</Text>
+        </View>
+      );
+    }
     return (
       <Modal
         animationType="slide"
@@ -59,18 +90,12 @@ const AddReport = () => {
         onRequestClose={() => {
           setShowCamera(false);
         }}>
-        <RNCamera
+        <Camera
           ref={cameraRef}
-          style={styles.cameraPreview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.off}
-          captureAudio={false} // Explicitly disable audio capture
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
+          style={StyleSheet.absoluteFill}
+          device={device}
+          isActive={showCamera}
+          photo={true} // Enable photo capture
         />
         <View style={styles.cameraControls}>
           <TouchableOpacity
@@ -219,12 +244,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 12,
-  },
-  cameraPreview: {
-    // Style for RNCamera component
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
   cameraControls: {
     // Container for camera buttons
