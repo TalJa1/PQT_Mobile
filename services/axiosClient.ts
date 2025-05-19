@@ -4,7 +4,7 @@ import {Platform} from 'react-native';
 // const HOST_IP = Platform.OS === 'android' ? '10.0.2.2' : 'localhost'; // This is the default IP for Android emulator to access localhost
 const HOST_IP = Platform.OS === 'android' ? 'localhost' : 'localhost'; // This is for physical devices
 
-const API_BASE_URL = `http://${HOST_IP}:8000/api/v1`;
+const API_BASE_URL = `http://${HOST_IP}:8000/api/v1`; // This is for localhost
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,
