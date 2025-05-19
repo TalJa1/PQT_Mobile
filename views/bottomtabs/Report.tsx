@@ -6,19 +6,20 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import {PostsData, Post} from '../../services/data';
 import {vh} from '../../services/styleProps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 
 const imageSources = {
   avatar: require('../../assets/report/avatar.png'),
   drought: require('../../assets/report/drought.jpg'),
   flood: require('../../assets/report/flood.jpg'),
   earthquake: require('../../assets/report/earthquake.jpg'),
+  user: require('../../assets/report/user.png'),
 };
 
 const getPostImageSource = (imagePath: string | undefined) => {
@@ -41,22 +42,25 @@ const Report = () => {
   const [renderData, setRenderData] = useState<Post[]>([]);
   const navigate = useNavigation();
 
-  useEffect(() => {
-    const storeAndLoadPosts = async () => {
-      try {
-        await AsyncStorage.setItem('posts', JSON.stringify(PostsData));
-        const storedPosts = await AsyncStorage.getItem('posts');
-        if (storedPosts) {
-          setRenderData(JSON.parse(storedPosts));
-        } else {
+  useFocusEffect(
+    useCallback(() => {
+      const loadPosts = async () => {
+        try {
+          let storedPosts = await AsyncStorage.getItem('posts');
+          if (storedPosts) {
+            setRenderData(JSON.parse(storedPosts));
+          } else {
+            await AsyncStorage.setItem('posts', JSON.stringify(PostsData));
+            setRenderData(PostsData);
+          }
+        } catch (error) {
+          console.log('Error loading or setting posts:', error);
           setRenderData(PostsData);
         }
-      } catch (error) {
-        console.log('Error fetching data:', error);
-      }
-    };
-    storeAndLoadPosts();
-  }, []);
+      };
+      loadPosts();
+    }, []),
+  );
 
   const extractTime = (dateTimeStr: string | undefined) => {
     if (!dateTimeStr) {
@@ -111,7 +115,14 @@ const Report = () => {
           {renderData.map((post: Post) => (
             <View key={post.id} style={styles.postCard}>
               <View style={styles.postHeader}>
-                <Image source={imageSources.avatar} style={styles.avatar} />
+                <Image
+                  source={
+                    post.name === 'Phung Quang Thang'
+                      ? imageSources.user
+                      : imageSources.avatar
+                  }
+                  style={styles.avatar}
+                />
                 <View style={styles.postHeaderTextContainer}>
                   <Text style={styles.postUserName}>{post.name}</Text>
                   <Text
