@@ -6,18 +6,58 @@ import {
   View,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
-import {fakeCautionsData, thienTaiData} from '../../services/data';
+import {fakeCautionsData} from '../../services/data';
 import {saveIcon2} from '../../assets/svgIcon';
 import {vw} from '../../services/styleProps';
+import disasterAPI from '../../apis/disasterAPI';
+import {Action, Dissater} from '../../services/model';
 
-const tabTitles = ['Bão', 'Lũ', 'Cháy rừng', 'Sạt lở', 'Hạn hán'];
+const tabTitles = [
+  {id: 1, title: 'Bão'},
+  {id: 2, title: 'Lũ'},
+  {id: 3, title: 'Cháy rừng'},
+  {id: 4, title: 'Sạt lở'},
+  {id: 5, title: 'Hạn hán'},
+];
 
 const Abilities = () => {
   const [selectedTab, setSelectedTab] = useState(tabTitles[0]);
+  const [tabDetailData, setTabDetailData] = useState<Action[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (selectedTab && selectedTab.id) {
+      const fetchTabData = async () => {
+        setLoading(true);
+        setError(null);
+        setTabDetailData(null);
+        try {
+          const disasterDetails: Dissater = await disasterAPI.getById(
+            selectedTab.id,
+          );
+          console.log('Disaster Details:', disasterDetails);
+
+          if (disasterDetails && disasterDetails.actions) {
+            setTabDetailData(disasterDetails.actions);
+          } else {
+            setTabDetailData([]); // Set to empty array if no actions or no data
+          }
+        } catch (err) {
+          setError('Failed to fetch data. Please try again.');
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchTabData();
+    }
+  }, [selectedTab]);
 
   const renderCards = () => {
     const allTypes = fakeCautionsData;
@@ -66,15 +106,35 @@ const Abilities = () => {
   };
 
   const renderTabData = () => {
-    const selectedData = thienTaiData.find(item => item.name === selectedTab);
-    if (!selectedData) {
-      return null;
+    if (loading) {
+      return (
+        <View style={styles.centeredMessage}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text>Loading data...</Text>
+        </View>
+      );
+    }
+
+    if (error) {
+      return (
+        <View style={styles.centeredMessage}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      );
+    }
+
+    if (!tabDetailData || tabDetailData.length === 0) {
+      return (
+        <View style={styles.centeredMessage}>
+          <Text>No information available for this category.</Text>
+        </View>
+      );
     }
 
     return (
       <View style={styles.tabDataContainer}>
-        {selectedData.actions.map((action, index) => (
-          <View key={index} style={styles.actionItem}>
+        {tabDetailData.map((action, index) => (
+          <View key={action.action_id || index} style={styles.actionItem}>
             <Text style={styles.actionTitle}>{action.title}</Text>
             <Text style={styles.actionDescription}>{action.description}</Text>
           </View>
@@ -101,7 +161,7 @@ const Abilities = () => {
           contentContainerStyle={styles.tabsContentContainer}>
           {tabTitles.map(title => (
             <TouchableOpacity
-              key={title}
+              key={title.id}
               style={[styles.tab, selectedTab === title && styles.selectedTab]}
               onPress={() => setSelectedTab(title)}>
               <Text
@@ -109,7 +169,7 @@ const Abilities = () => {
                   styles.tabText,
                   selectedTab === title && styles.selectedTabText,
                 ]}>
-                {title}
+                {title.title}
               </Text>
             </TouchableOpacity>
           ))}
@@ -243,5 +303,15 @@ const styles = StyleSheet.create({
   actionDescription: {
     fontSize: 14,
     color: '#333',
+  },
+  centeredMessage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
   },
 });
