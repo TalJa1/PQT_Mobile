@@ -13,7 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import {fakeCautionsData} from '../../services/data';
 import {saveIcon2} from '../../assets/svgIcon';
-import {vw} from '../../services/styleProps';
+import {vh, vw} from '../../services/styleProps';
 import disasterAPI from '../../apis/disasterAPI';
 import {Action, Dissater} from '../../services/model';
 
@@ -174,7 +174,7 @@ const Abilities = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        {renderTabData()}
+        <View style={{paddingBottom: vh(7)}}>{renderTabData()}</View>
       </ScrollView>
     </SafeAreaView>
   );
