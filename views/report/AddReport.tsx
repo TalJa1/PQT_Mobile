@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   Image, // Added for displaying the image
   Modal, // Added for camera view
+  Alert, // Added for feedback
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react'; // Added useRef
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import {useNavigation} from '@react-navigation/native';
@@ -19,6 +21,7 @@ import {
   useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera'; // Import Camera from react-native-vision-camera
+import {Post} from '../../services/data';
 
 const AddReport = () => {
   const navigation = useNavigation();
@@ -44,8 +47,48 @@ const AddReport = () => {
     }
   }, [showCamera, hasPermission, requestPermission]);
 
-  const handleSubmit = () => {
-    console.log('Report Submitted', {description, time, imageUri}); // Added imageUri to log
+  const handleSubmit = async () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const currentDatetime = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+    try {
+      const existingPostsJson = await AsyncStorage.getItem('posts');
+      let posts: Post[] = [];
+      if (existingPostsJson !== null) {
+        const parsedPosts = JSON.parse(existingPostsJson);
+        if (Array.isArray(parsedPosts)) {
+          posts = parsedPosts;
+        } else {
+          console.warn(
+            "'post' in AsyncStorage was not an array. Initializing as empty array.",
+          );
+        }
+      }
+      const newPost: Post = {
+        id: `post${posts.length + 1}`,
+        avatar: '../../assets/report/user.png', // Path to the asset
+        name: 'Phung Quang Thang',
+        datetime: currentDatetime,
+        description: description,
+        post_image: imageUri ?? '',
+        location: 'thanh pho Ho Chi Minh',
+      };
+      posts.push(newPost);
+      await AsyncStorage.setItem('posts', JSON.stringify(posts));
+      console.log('Posts:', posts);
+      Alert.alert('Success', 'Report submitted successfully!');
+      setDescription('');
+      setImageUri(null);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Failed to save post', error);
+      Alert.alert('Error', 'Failed to submit report.');
+    }
   };
 
   const handleTakePhoto = async () => {
