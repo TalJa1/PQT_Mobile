@@ -5,25 +5,88 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image, // Added for displaying the image
+  Modal, // Added for camera view
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react'; // Added useRef
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomStatusBar from '../../components/CustomStatusBar';
 import {useNavigation} from '@react-navigation/native';
 import {backIcon, cameraIcon} from '../../assets/svgIcon';
 import {vw} from '../../services/styleProps';
+import {RNCamera} from 'react-native-camera'; // Import RNCamera
 
 const AddReport = () => {
   const navigation = useNavigation();
   const [description, setDescription] = useState('');
   const [time, setTime] = useState('');
-  // const [images, setImages] = useState([]); // For handling multiple images
+  const [showCamera, setShowCamera] = useState(false); // State for camera visibility
+  const [imageUri, setImageUri] = useState<string | null>(null); // State for captured image URI
+  const cameraRef = useRef<RNCamera | null>(null); // Ref for RNCamera
+
+  useEffect(() => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = today.getFullYear();
+    setTime(`${day}/${month}/${year}`);
+  }, []);
 
   const handleSubmit = () => {
-    // Logic to handle submitting the report
-    console.log('Report Submitted', {description, time});
-    // Potentially navigate back or show a success message
+    console.log('Report Submitted', {description, time, imageUri}); // Added imageUri to log
   };
+
+  const handleTakePhoto = async () => {
+    if (cameraRef.current) {
+      const options = {quality: 0.5, base64: true};
+      try {
+        const data = await cameraRef.current.takePictureAsync(options);
+        setImageUri(data.uri);
+        setShowCamera(false); // Hide camera after taking photo
+      } catch (error) {
+        console.error('Failed to take picture', error);
+        setShowCamera(false);
+      }
+    }
+  };
+
+  if (showCamera) {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={showCamera}
+        onRequestClose={() => {
+          setShowCamera(false);
+        }}>
+        <RNCamera
+          ref={cameraRef}
+          style={styles.cameraPreview}
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.off}
+          captureAudio={false} // Explicitly disable audio capture
+          androidCameraPermissionOptions={{
+            title: 'Permission to use camera',
+            message: 'We need your permission to use your camera',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+        />
+        <View style={styles.cameraControls}>
+          <TouchableOpacity
+            onPress={handleTakePhoto}
+            style={styles.captureButton}>
+            <Text style={styles.captureButtonText}>SNAP</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowCamera(false)}
+            style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,17 +115,22 @@ const AddReport = () => {
             style={styles.input}
             placeholder=""
             value={time}
-            onChangeText={setTime}
+            editable={false}
           />
 
           <Text style={styles.imageSectionTitle}>Thêm các ảnh liên quan</Text>
-          <TouchableOpacity style={styles.imagePickerBox}>
-            {cameraIcon(40, 40, '#B0B0B0')}
-            <Text style={styles.imagePickerText}>Thêm</Text>
+          <TouchableOpacity
+            style={styles.imagePickerBox}
+            onPress={() => setShowCamera(true)}>
+            {imageUri ? (
+              <Image source={{uri: imageUri}} style={styles.previewImage} />
+            ) : (
+              <>
+                {cameraIcon(40, 40, '#B0B0B0')}
+                <Text style={styles.imagePickerText}>Thêm</Text>
+              </>
+            )}
           </TouchableOpacity>
-
-          {/* Placeholder for displaying selected images if any */}
-          {/* <View style={styles.selectedImagesContainer}></View> */}
         </View>
       </ScrollView>
       <View style={styles.footer}>
@@ -122,7 +190,7 @@ const styles = StyleSheet.create({
     borderColor: '#D0D0D0', // Light border for the input
     borderWidth: 1,
     marginBottom: 10, // Space below each input
-    color: '#333',
+    color: '#333', // Ensure text color is visible
   },
   imageSectionTitle: {
     fontSize: 16,
@@ -145,6 +213,55 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#B0B0B0', // Light gray for text
     marginTop: 8,
+  },
+  previewImage: {
+    // Style for the preview image
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+  },
+  cameraPreview: {
+    // Style for RNCamera component
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  cameraControls: {
+    // Container for camera buttons
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingVertical: 20,
+  },
+  captureButton: {
+    // Style for capture button
+    backgroundColor: '#fff',
+    borderRadius: 35,
+    padding: 15,
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  captureButtonText: {
+    // Style for capture button text
+    fontSize: 14,
+    color: '#000',
+  },
+  closeButton: {
+    // Style for close button
+    backgroundColor: 'transparent',
+    padding: 10,
+  },
+  closeButtonText: {
+    // Style for close button text
+    fontSize: 16,
+    color: '#fff',
   },
   footer: {
     padding: 20,
