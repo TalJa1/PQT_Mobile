@@ -48,7 +48,9 @@ const Report = () => {
         try {
           let storedPosts = await AsyncStorage.getItem('posts');
           if (storedPosts) {
-            setRenderData(JSON.parse(storedPosts));
+            const parsedPosts = JSON.parse(storedPosts);
+            const reversedPosts = parsedPosts.reverse();
+            setRenderData(reversedPosts);
           } else {
             await AsyncStorage.setItem('posts', JSON.stringify(PostsData));
             setRenderData(PostsData);
