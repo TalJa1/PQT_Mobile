@@ -64,6 +64,51 @@ const Report = () => {
     }, []),
   );
 
+  const formatTimeAgo = (dateTimeStr: string | undefined): string => {
+    if (!dateTimeStr) {
+      return 'N/A';
+    }
+
+    // Adjusting parser for "DD/MM/YYYY, HH:mm" or "DD/MM/YYYY HH:mm"
+    const parts = dateTimeStr.replace(',', '').split(' '); // "DD/MM/YYYY", "HH:mm"
+    const dateParts = parts[0].split('/'); // "DD", "MM", "YYYY"
+    const timeParts = parts[1].split(':'); // "HH", "mm"
+
+    // Ensure month is 0-indexed for Date constructor (0-11)
+    const postDate = new Date(
+      parseInt(dateParts[2], 10),
+      parseInt(dateParts[1], 10) - 1,
+      parseInt(dateParts[0], 10),
+      parseInt(timeParts[0], 10),
+      parseInt(timeParts[1], 10),
+    );
+
+    const now = new Date();
+    const seconds = Math.round((now.getTime() - postDate.getTime()) / 1000);
+    const minutes = Math.round(seconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+    const months = Math.round(days / 30.44); // Average days in month
+    const years = Math.round(days / 365.25); // Account for leap years
+
+    if (seconds < 60) {
+      return `${seconds} giây trước`;
+    }
+    if (minutes < 60) {
+      return `${minutes} phút trước`;
+    }
+    if (hours < 24) {
+      return `${hours} giờ trước`;
+    }
+    if (days < 30) {
+      return `${days} ngày trước`;
+    }
+    if (months < 12) {
+      return `${months} tháng trước`;
+    }
+    return `${years} năm trước`;
+  };
+
   const extractTime = (dateTimeStr: string | undefined) => {
     if (!dateTimeStr) {
       return 'N/A';
@@ -130,7 +175,7 @@ const Report = () => {
                   <Text
                     style={
                       styles.postMeta
-                    }>{`30 phút trước · ${getDisplayLocation(
+                    }>{`${formatTimeAgo(post.datetime)} · ${getDisplayLocation(
                     post.location,
                   )}`}</Text>
                 </View>
