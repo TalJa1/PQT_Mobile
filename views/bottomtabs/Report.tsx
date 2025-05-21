@@ -24,8 +24,9 @@ const imageSources = {
 
 const getPostImageSource = (imagePath: string | undefined) => {
   if (!imagePath) {
-    return imageSources.drought;
+    return imageSources.drought; // Default image
   }
+  // Check for predefined asset paths
   if (imagePath === 'assets/report/drought.jpg') {
     return imageSources.drought;
   }
@@ -35,7 +36,13 @@ const getPostImageSource = (imagePath: string | undefined) => {
   if (imagePath === 'assets/report/earthquake.jpg') {
     return imageSources.earthquake;
   }
-  return imageSources.drought;
+  // If it's not a predefined asset, assume it's a URI (e.g., from camera)
+  // The Image component can handle { uri: string } for network or local file URIs
+  if (imagePath.startsWith('file://') || imagePath.startsWith('http')) {
+    return {uri: imagePath};
+  }
+  // Fallback or default if the path is not recognized or not a URI
+  return imageSources.drought; // Or handle as an error/different default
 };
 
 const Report = () => {
@@ -198,7 +205,7 @@ const Report = () => {
 
               {post.post_image && (
                 <Image
-                  source={getPostImageSource(post.post_image)}
+                  source={getPostImageSource(post.post_image) as any} // Added 'as any' to bypass strict type checking if mixed types are returned
                   style={styles.postImage}
                 />
               )}
