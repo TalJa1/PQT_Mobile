@@ -41,8 +41,6 @@ const Abilities = () => {
           const disasterDetails: Dissater = await disasterAPI.getById(
             selectedTabId,
           );
-          console.log('Disaster Details:', disasterDetails);
-
           if (disasterDetails && disasterDetails.actions) {
             setTabDetailData(disasterDetails.actions);
           } else {
