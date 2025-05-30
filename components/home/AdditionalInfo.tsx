@@ -64,14 +64,13 @@ const AdditionalInfo = () => {
         <View style={styles.supportButtonsContainer}>
           <TouchableOpacity
             style={styles.supportButton}
-            onPress={() => navigation.navigate('NearbyShelters')}
-          >
+            onPress={() => navigation.navigate('NearbyShelters')}>
             <View style={styles.supportButtonContent}>
               {homeLocationIcon(vw(5), vw(5))}
               <Text style={styles.supportButtonText}>Nơi sơ tán gần bạn</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.supportButton}
             onPress={() => navigation.navigate('EmergencyContacts')} // Add onPress handler
           >

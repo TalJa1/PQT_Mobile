@@ -12,6 +12,7 @@ import Abilities from './views/bottomtabs/Abilities';
 import Report from './views/bottomtabs/Report';
 import MustDoScreen from './views/predict/MustDo';
 import AddReport from './views/report/AddReport';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import NearbySheltersScreen from './components/home/NearbySheltersScreen';
 import EmergencyContactsScreen from './components/home/EmergencyContactsScreen';
 
@@ -102,42 +103,36 @@ const App = () => {
     );
   };
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen
-          name="Main"
-          component={TabNavigator}
-          options={{headerShown: false}}
-        />
-        {/* others */}
-        <Stack.Screen
-          name="MustDo"
-          component={MustDoScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AddReport"
-          component={AddReport}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="NearbyShelters"
-          component={NearbySheltersScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EmergencyContacts"
-          component={EmergencyContactsScreen}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={styles.rootView}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="MainTabs"
+          screenOptions={{headerShown: false}}>
+          <Stack.Screen name="MainTabs" component={TabNavigator} />
+          <Stack.Screen name="MustDo" component={MustDoScreen} />
+          <Stack.Screen name="AddReport" component={AddReport} />
+          <Stack.Screen
+            name="NearbyShelters"
+            component={NearbySheltersScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="EmergencyContacts"
+            component={EmergencyContactsScreen}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 const styles = StyleSheet.create({
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  rootView: {
+    flex: 1,
   },
 });
 
