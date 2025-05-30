@@ -72,7 +72,6 @@ const emergencyContactsData: EmergencyContact[] = [
   },
 ];
 
-// Constants for the new slide-the-icon mechanism
 const ICON_DRAGGABLE_WIDTH = vw(13); // Width of the draggable icon container
 const SLIDE_FULL_RANGE = vw(51); // How far the icon can be dragged to the right (visually)
 const SLIDE_TO_CALL_THRESHOLD = 5; // Call triggers after sliding 5dp (logical pixels)
@@ -89,11 +88,8 @@ const EmergencyContactItem = ({
 
   const panGesture = Gesture.Pan()
     .onUpdate(event => {
-      // Allow dragging only within the defined range [0, SLIDE_FULL_RANGE]
       const newTranslateX = Math.max(0, Math.min(event.translationX, SLIDE_FULL_RANGE));
       translateX.setValue(newTranslateX);
-      // Check for call threshold during update if you want immediate call trigger
-      // For this implementation, call is made onEnd for clarity
     })
     .onEnd(event => {
       const finalTranslateX = event.translationX;
@@ -248,7 +244,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1, // Ensure icon is on top of staticContentContainer
     marginLeft: vw(3), // Initial horizontal position of the icon
-    // backgroundColor is set inline via item.iconBackgroundColor
   },
   infoContainer: {
     flex: 1, // Takes up available space in the staticContentContainer
