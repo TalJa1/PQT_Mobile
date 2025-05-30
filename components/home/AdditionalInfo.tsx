@@ -71,7 +71,10 @@ const AdditionalInfo = () => {
               <Text style={styles.supportButtonText}>Nơi sơ tán gần bạn</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.supportButton}>
+          <TouchableOpacity 
+            style={styles.supportButton}
+            onPress={() => navigation.navigate('EmergencyContacts')} // Add onPress handler
+          >
             <View style={styles.supportButtonContent}>
               {contactIcon(vw(5), vw(5))}
               <Text style={styles.supportButtonText}>Liên lạc khẩn cấp</Text>
