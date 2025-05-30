@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {vh, vw} from '../../services/styleProps';
-import {homeDiagram} from '../../assets/svgIcon';
+import {homeDiagram, contactIcon, homeLocationIcon} from '../../assets/svgIcon';
+import {NavigationProp, useNavigation} from '@react-navigation/native'; // Import useNavigation
 
 const DAY_WAVE_HEIGHT = vh(6);
 const NIGHT_WAVE_DEPTH = vh(3);
@@ -11,6 +12,8 @@ const GRAPH_AREA_WIDTH = vw(55);
 const NIGHT_WAVE_WIDTH = vw(13);
 
 const AdditionalInfo = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   return (
     <View style={styles.container}>
       <View style={styles.sunGraphOuterContainer}>
@@ -53,6 +56,28 @@ const AdditionalInfo = () => {
         <TouchableOpacity style={styles.buttonLight}>
           <Text style={styles.buttonLightText}>Kỹ năng ứng phó</Text>
         </TouchableOpacity>
+      </View>
+
+      {/* Render below */}
+      <View style={styles.supportSection}>
+        <Text style={styles.supportTitle}>Hỗ trợ</Text>
+        <View style={styles.supportButtonsContainer}>
+          <TouchableOpacity
+            style={styles.supportButton}
+            onPress={() => navigation.navigate('NearbyShelters')}
+          >
+            <View style={styles.supportButtonContent}>
+              {homeLocationIcon(vw(5), vw(5))}
+              <Text style={styles.supportButtonText}>Nơi sơ tán gần bạn</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.supportButton}>
+            <View style={styles.supportButtonContent}>
+              {contactIcon(vw(5), vw(5))}
+              <Text style={styles.supportButtonText}>Liên lạc khẩn cấp</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -224,6 +249,43 @@ const styles = StyleSheet.create({
     color: '#3A3A3A',
     fontSize: vw(4),
     fontWeight: '500',
+  },
+  supportSection: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: vh(3),
+  },
+  supportTitle: {
+    fontSize: vw(4.5),
+    fontWeight: 'bold',
+    color: '#3A3A3A',
+    marginBottom: vh(2),
+  },
+  supportButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  supportButton: {
+    backgroundColor: '#D6EAF8', // Light blue background
+    paddingVertical: vh(1.5),
+    paddingHorizontal: vw(3),
+    borderRadius: vw(2),
+    flex: 1,
+    marginHorizontal: vw(1),
+    alignItems: 'center', // Center content horizontally
+    justifyContent: 'center', // Center content vertically
+  },
+  supportButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  supportButtonText: {
+    color: '#2C3E50', // Dark text color
+    fontSize: vw(3.8),
+    fontWeight: '500',
+    marginLeft: vw(2),
+    textAlign: 'center',
   },
 });
 

@@ -238,3 +238,167 @@ export const PostsData: Post[] = [
   },
 ];
 
+export interface LocationData {
+  id: string;
+  address: string;
+  distance: string;
+  type: string; // Display name of the place type (Vietnamese)
+  category: string; // A more generic category key, e.g., "education", "health"
+}
+
+export const fakeHCMCKLocations: LocationData[] = [
+  {
+    id: '1',
+    address: 'Số 123, Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 500m',
+    type: 'Nhà hàng',
+    category: 'food_drink',
+  },
+  {
+    id: '2',
+    address: 'Số 45, Đường Lê Lợi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 1.2km',
+    type: 'Cửa hàng tiện lợi',
+    category: 'shopping',
+  },
+  {
+    id: '3',
+    address: 'Số 78, Đường Pasteur, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 800m',
+    type: 'Quán cà phê',
+    category: 'food_drink',
+  },
+  {
+    id: '4',
+    address: 'Số 210, Đường Hai Bà Trưng, Phường Đa Kao, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 300m',
+    type: 'Trường học',
+    category: 'education',
+  },
+  {
+    id: '5',
+    address: 'Số 55, Đường Cách Mạng Tháng Tám, Phường Phạm Ngũ Lão, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 1.5km',
+    type: 'Bệnh viện',
+    category: 'health',
+  },
+  {
+    id: '6',
+    address: 'Số 300, Đường Điện Biên Phủ, Phường 7, Quận 3, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 2.1km',
+    type: 'Siêu thị',
+    category: 'shopping',
+  },
+  {
+    id: '7',
+    address: 'Số 12, Đường Nguyễn Thị Minh Khai, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 650m',
+    type: 'Ngân hàng',
+    category: 'service',
+  },
+  {
+    id: '8',
+    address: 'Số 99, Đường Võ Văn Tần, Phường 6, Quận 3, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 900m',
+    type: 'Nhà thuốc',
+    category: 'health',
+  },
+  {
+    id: '9',
+    address: 'Số 180, Đường Xô Viết Nghệ Tĩnh, Phường 21, Quận Bình Thạnh, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 3.5km',
+    type: 'Chợ',
+    category: 'shopping',
+  },
+  {
+    id: '10',
+    address: 'Số 67, Đường Phan Xích Long, Phường 2, Quận Phú Nhuận, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 2.8km',
+    type: 'Nhà hàng',
+    category: 'food_drink',
+  },
+  {
+    id: '11',
+    address: 'Số 40, Đường Thảo Điền, Phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 4.0km',
+    type: 'Trường Quốc tế',
+    category: 'education',
+  },
+  {
+    id: '12',
+    address: 'Số 222, Đường Hoàng Diệu, Phường 9, Quận 4, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 1.9km',
+    type: 'Công viên',
+    category: 'recreation',
+  },
+  {
+    id: '13',
+    address: 'Số 34, Đường Sư Vạn Hạnh, Phường 12, Quận 10, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 2.5km',
+    type: 'Trung tâm mua sắm',
+    category: 'shopping',
+  },
+  {
+    id: '14',
+    address: 'Số 101, Đường Tôn Dật Tiên, Phường Tân Phú, Quận 7, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 5.2km',
+    type: 'Hồ bơi',
+    category: 'recreation',
+  },
+  {
+    id: '15',
+    address: 'Số 50, Đường Quang Trung, Phường 10, Quận Gò Vấp, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 6.0km',
+    type: 'Rạp chiếu phim',
+    category: 'entertainment',
+  },
+  {
+    id: '16',
+    address: 'Số 15, Đường Trần Hưng Đạo, Phường Cầu Ông Lãnh, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 750m',
+    type: 'Nhà sách',
+    category: 'shopping',
+  },
+  {
+    id: '17',
+    address: 'Số 88, Đường Nguyễn Trãi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 1.1km',
+    type: 'Cửa hàng thời trang',
+    category: 'shopping',
+  },
+  {
+    id: '18',
+    address: 'Số 250, Đường Âu Cơ, Phường 9, Quận Tân Bình, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 4.5km',
+    type: 'Phòng gym',
+    category: 'health_fitness',
+  },
+  {
+    id: '19',
+    address: 'Số 7, Đường Hồ Xuân Hương, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 1.3km',
+    type: 'Spa & Massage',
+    category: 'wellness',
+  },
+  {
+    id: '20',
+    address: 'Số 33, Đường Lê Văn Sỹ, Phường 13, Quận Phú Nhuận, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 2.2km',
+    type: 'Tiệm bánh',
+    category: 'food_drink',
+  },
+  {
+    id: '21',
+    address: 'Số 190, Đường Hồng Bàng, Phường 12, Quận 5, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 3.8km',
+    type: 'Bệnh viện Y học cổ truyền',
+    category: 'health',
+  },
+  {
+    id: '22',
+    address: 'Số 4, Đường Tôn Đức Thắng, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+    distance: 'Cách bạn 950m',
+    type: 'Bảo tàng',
+    category: 'culture_history',
+  },
+];

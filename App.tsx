@@ -12,6 +12,7 @@ import Abilities from './views/bottomtabs/Abilities';
 import Report from './views/bottomtabs/Report';
 import MustDoScreen from './views/predict/MustDo';
 import AddReport from './views/report/AddReport';
+import NearbySheltersScreen from './components/home/NearbySheltersScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -116,6 +117,11 @@ const App = () => {
         <Stack.Screen
           name="AddReport"
           component={AddReport}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="NearbyShelters"
+          component={NearbySheltersScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
