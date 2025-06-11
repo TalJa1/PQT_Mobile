@@ -29,7 +29,6 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
 
       // Let user choose location
       const location = await locationService.getLocationWithChoice();
-      console.log('Selected location:', location);
 
       // Fetch weather data
       const weather = await weatherService.getCurrentWeather(
