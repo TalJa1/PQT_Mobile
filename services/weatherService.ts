@@ -41,6 +41,17 @@ export interface ForecastData {
         };
         daily_chance_of_rain: number;
       };
+      hour: Array<{
+        time: string;
+        temp_c: number;
+        condition: {
+          text: string;
+          icon: string;
+        };
+        chance_of_rain: number;
+        humidity: number;
+        wind_kph: number;
+      }>;
     }>;
   };
 }
@@ -64,20 +75,34 @@ class WeatherService {
       console.error('Error fetching current weather:', error);
       throw error;
     }
-  }
-  // Get weather forecast by coordinates
+  }  // Get weather forecast by coordinates
   async getWeatherForecast(
     lat: number,
     lon: number,
-    days: number = 3,
+    days: number = 7,
   ): Promise<ForecastData> {
-    try {
-      const response = await axios.get(
+    try {      const response = await axios.get(
         `${WEATHER_BASE_URL}/forecast.json?key=${this.apiKey}&q=${lat},${lon}&days=${days}&aqi=no&alerts=no`,
       );
       return response.data;
     } catch (error) {
       console.error('Error fetching weather forecast:', error);
+      throw error;
+    }
+  }
+  // Get hourly weather forecast by coordinates
+  async getHourlyForecast(
+    lat: number,
+    lon: number,
+    hours: number = 24,
+  ): Promise<ForecastData> {
+    try {
+      const response = await axios.get(
+        `${WEATHER_BASE_URL}/forecast.json?key=${this.apiKey}&q=${lat},${lon}&hours=${hours}&aqi=no&alerts=no`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching hourly weather forecast:', error);
       throw error;
     }
   }

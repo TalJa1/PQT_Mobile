@@ -1,31 +1,51 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import {vw, vh} from '../../services/styleProps';
+import weatherService, {ForecastData} from '../../services/weatherService';
+import locationService from '../../services/locationService';
 
-const generateHourlyData = () => {
-  const data = [];
-  const now = new Date();
-  const currentActualHour = now.getHours();
+const getWeatherIcon = (conditionText: string, _iconUrl: string) => {
+  const condition = conditionText.toLowerCase();
 
-  for (let h = 0; h < 24; h++) {
-    const isCurrentHour = h === currentActualHour;
-    const displayTime = isCurrentHour
-      ? 'Bây giờ'
-      : `${h.toString().padStart(2, '0')}:00`;
-    data.push({
-      time: displayTime,
-      hour: h, // Store actual hour for logic
-      isCurrent: isCurrentHour, // Flag for current hour
-      icon: 'sun', // Placeholder, replace with actual logic based on hour h
-      temp: `${18 + Math.floor(Math.random() * 5)}°`, // Random temp for example
-      rain: `${Math.floor(Math.random() * 50)}%`, // Random rain % for example
-    });
+  if (
+    condition.includes('rain') ||
+    condition.includes('drizzle') ||
+    condition.includes('shower')
+  ) {
+    return 'rain';
   }
-  return data;
+  if (
+    condition.includes('snow') ||
+    condition.includes('sleet') ||
+    condition.includes('blizzard')
+  ) {
+    return 'cloud';
+  }
+  if (
+    condition.includes('cloud') ||
+    condition.includes('overcast') ||
+    condition.includes('mist') ||
+    condition.includes('fog')
+  ) {
+    if (condition.includes('partly') || condition.includes('few')) {
+      return 'sun_cloud';
+    }
+    return 'cloud';
+  }
+  if (condition.includes('thunder') || condition.includes('storm')) {
+    return 'sun';
+  }
+  // Default to sun for clear/sunny conditions
+  return 'sun';
 };
-
-const hourlyData = generateHourlyData();
 
 const getDayOfWeekVietnamese = (date: Date) => {
   const days = [
@@ -40,36 +60,6 @@ const getDayOfWeekVietnamese = (date: Date) => {
   return days[date.getDay()];
 };
 
-const generateDailyData = () => {
-  const data = [];
-  const today = new Date();
-
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-
-    const dayName = i === 0 ? 'Hôm nay' : getDayOfWeekVietnamese(date);
-    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}`;
-
-    data.push({
-      day: `${dayName}, ${formattedDate}`,
-      // Keep existing icon and temp logic, or replace with dynamic data if available
-      icon:
-        i % 4 === 0
-          ? 'cloudy_rain'
-          : i % 3 === 0
-          ? 'sun_cloud'
-          : i % 5 === 0
-          ? 'rain'
-          : 'cloud', // Example icon logic
-      temp: `${20 + Math.floor(Math.random() * 5)}°`, // Example temp logic
-    });
-  }
-  return data;
-};
-
-const dailyData = generateDailyData();
-
 const iconMap: {[key: string]: any} = {
   sun: require('../../assets/predict/sunAndThunder.png'),
   cloudy_rain: require('../../assets/predict/sunAndRain.png'),
@@ -79,20 +69,153 @@ const iconMap: {[key: string]: any} = {
 };
 
 const ThoiTietTab = () => {
+  const [forecastData, setForecastData] = useState<ForecastData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const scrollViewRef = React.useRef<ScrollView>(null);
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      const nowIndex = hourlyData.findIndex(item => item.isCurrent);
-      if (nowIndex !== -1 && scrollViewRef.current) {
-        const itemWidth = vw(20) + vw(3);
-        const screenCenterOffset = vw(50) - itemWidth / 2;
-        let scrollToX = nowIndex * itemWidth - screenCenterOffset;
-        scrollToX = Math.max(0, scrollToX); // Ensure not scrolling to negative
-        scrollViewRef.current.scrollTo({x: scrollToX, animated: true});
-      }
-    }, 100);
+  const fetchWeatherData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Get current location
+      const location = await locationService.getCurrentPosition(); // Fetch 7-day forecast with hourly data
+      const forecast = await weatherService.getWeatherForecast(
+        location.latitude,
+        location.longitude,
+        7,
+      );
+      console.log('Forecast data received:', {
+        location: forecast.location,
+        totalDays: forecast.forecast.forecastday.length,
+        firstDay: forecast.forecast.forecastday[0],
+        hourlyDataLength: forecast.forecast.forecastday[0]?.hour?.length,
+      });
+
+      setForecastData(forecast);
+    } catch (err) {
+      console.error('Error fetching weather data:', err);
+      setError('Không thể tải dữ liệu thời tiết');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWeatherData();
   }, []);
+
+  const generateHourlyData = () => {
+    if (!forecastData?.forecast?.forecastday?.[0]?.hour) {
+      return [];
+    }
+
+    const todayHours = forecastData.forecast.forecastday[0].hour;
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    return todayHours.map((hourData, index) => {
+      const isCurrentHour = index === currentHour;
+      const displayTime = isCurrentHour
+        ? 'Bây giờ'
+        : `${index.toString().padStart(2, '0')}:00`;
+
+      return {
+        time: displayTime,
+        hour: index,
+        isCurrent: isCurrentHour,
+        icon: getWeatherIcon(hourData.condition.text, hourData.condition.icon),
+        temp: `${Math.round(hourData.temp_c)}°`,
+        rain: `${hourData.chance_of_rain}%`,
+      };
+    });
+  };
+  const generateDailyData = () => {
+    if (!forecastData?.forecast?.forecastday) {
+      console.log('No forecast data available for daily data');
+      return [];
+    }
+
+    console.log(
+      'Generating daily data for',
+      forecastData.forecast.forecastday.length,
+      'days',
+    );
+
+    return forecastData.forecast.forecastday.map((dayData, index) => {
+      const date = new Date(dayData.date);
+      const dayName = index === 0 ? 'Hôm nay' : getDayOfWeekVietnamese(date);
+      const formattedDate = `${date.getDate()}/${date.getMonth() + 1}`;
+
+      return {
+        day: `${dayName}, ${formattedDate}`,
+        icon: getWeatherIcon(
+          dayData.day.condition.text,
+          dayData.day.condition.icon,
+        ),
+        temp: `${Math.round(dayData.day.maxtemp_c)}°`,
+        minTemp: `${Math.round(dayData.day.mintemp_c)}°`,
+        condition: dayData.day.condition.text,
+        rainChance: `${dayData.day.daily_chance_of_rain}%`,
+      };
+    });
+  };
+
+  const hourlyData = generateHourlyData();
+  const dailyData = generateDailyData();
+
+  useEffect(() => {
+    if (hourlyData.length > 0) {
+      setTimeout(() => {
+        const nowIndex = hourlyData.findIndex(item => item.isCurrent);
+        if (nowIndex !== -1 && scrollViewRef.current) {
+          const itemWidth = vw(20) + vw(3);
+          const screenCenterOffset = vw(50) - itemWidth / 2;
+          let scrollToX = nowIndex * itemWidth - screenCenterOffset;
+          scrollToX = Math.max(0, scrollToX);
+          scrollViewRef.current.scrollTo({x: scrollToX, animated: true});
+        }
+      }, 100);
+    }
+  }, [hourlyData]);
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <ActivityIndicator size="large" color="white" />
+        <Text
+          style={[
+            styles.sectionTitle,
+            {textAlign: 'center', marginTop: vh(2)},
+          ]}>
+          Đang tải dữ liệu thời tiết...
+        </Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <Text
+          style={[
+            styles.sectionTitle,
+            {textAlign: 'center', color: '#ff6b6b'},
+          ]}>
+          {error}
+        </Text>
+        <Text
+          style={[
+            styles.sectionTitle,
+            {textAlign: 'center', marginTop: vh(2), fontSize: vw(3.5)},
+          ]}
+          onPress={fetchWeatherData}>
+          Nhấn để thử lại
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -153,8 +276,14 @@ const ThoiTietTab = () => {
               </View>
               <View style={{width: vw(5)}} />
               <View style={styles.dailyTextContainer}>
-                <Text style={styles.dailyTemp}>{item.temp}</Text>
-                <Text style={styles.dailyDay}>{item.day}</Text>
+                <View style={styles.dailyTempContainer}>
+                  <Text style={styles.dailyTemp}>{item.temp}</Text>
+                  <Text style={styles.dailyMinTemp}>{item.minTemp}</Text>
+                </View>
+                <View style={styles.dailyInfoContainer}>
+                  <Text style={styles.dailyDay}>{item.day}</Text>
+                  <Text style={styles.dailyRainChance}>{item.rainChance}</Text>
+                </View>
               </View>
             </View>
           ))}
@@ -167,6 +296,10 @@ const ThoiTietTab = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sectionTitle: {
     fontSize: vw(4.5),
@@ -238,21 +371,41 @@ const styles = StyleSheet.create({
   dailyTextContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
     height: '100%',
     borderColor: '#1F2D54',
     borderRadius: 100,
+    paddingHorizontal: vw(4),
+  },
+  dailyTempContainer: {
+    alignItems: 'center',
   },
   dailyTemp: {
     fontSize: vw(5),
     fontWeight: 'bold',
     color: '#1F2D54',
   },
+  dailyMinTemp: {
+    fontSize: vw(3.5),
+    color: '#1F2D54',
+    opacity: 0.7,
+  },
+  dailyInfoContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
   dailyDay: {
     fontSize: vw(4),
     color: '#1F2D54',
+    textAlign: 'right',
+  },
+  dailyRainChance: {
+    fontSize: vw(3.5),
+    color: '#1F2D54',
+    opacity: 0.7,
+    textAlign: 'right',
   },
 });
 
