@@ -50,10 +50,10 @@ const AdditionalInfo = () => {
       </View>
 
       <View style={styles.buttonsSection}>
-        <TouchableOpacity style={styles.buttonDark}>
+        <TouchableOpacity style={styles.buttonDark} disabled>
           <Text style={styles.buttonDarkText}>Chi tiết cảnh báo</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonLight}>
+        <TouchableOpacity style={styles.buttonLight} disabled>
           <Text style={styles.buttonLightText}>Kỹ năng ứng phó</Text>
         </TouchableOpacity>
       </View>
