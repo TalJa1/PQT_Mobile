@@ -13,14 +13,13 @@ import {vh, vw} from '../../services/styleProps';
 import {backIcon} from '../../assets/svgIcon';
 import locationService, {LocationCoords} from '../../services/locationService';
 
-// Function to calculate distance between two coordinates using Haversine formula
 const calculateDistance = (
   lat1: number,
   lon1: number,
   lat2: number,
   lon2: number,
 ): number => {
-  const R = 6371; // Radius of the Earth in kilometers
+  const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
@@ -30,7 +29,7 @@ const calculateDistance = (
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c; // Distance in kilometers
+  const distance = R * c;
   return distance;
 };
 
@@ -96,16 +95,21 @@ const NearbySheltersScreen = () => {
         return distanceA - distanceB;
       })
     : fakeHCMCKLocations;
+  const renderItem = ({item, index}: {item: LocationData; index: number}) => {
+    const isTop5 = index < 5;
 
-  const renderItem = ({item}: {item: LocationData}) => (
-    <View style={styles.itemContainer}>
-      <View style={styles.itemContent}>
-        <Text style={styles.itemAddress}>{item.address}</Text>
-        <Text style={styles.itemDistance}>{getDistanceForLocation(item)}</Text>
+    return (
+      <View style={styles.itemContainer}>
+        <View style={styles.itemContent}>
+          <Text style={styles.itemAddress}>{item.address}</Text>
+          <Text style={[styles.itemDistance, isTop5 && styles.nearestDistance]}>
+            {getDistanceForLocation(item)}
+          </Text>
+        </View>
+        <Text style={styles.itemType}>{item.type}</Text>
       </View>
-      <Text style={styles.itemType}>{item.type}</Text>
-    </View>
-  );
+    );
+  };
 
   if (loading) {
     return (
@@ -194,6 +198,10 @@ const styles = StyleSheet.create({
   itemDistance: {
     fontSize: vw(3.5),
     color: '#7F8C8D',
+  },
+  nearestDistance: {
+    color: '#E74C3C', // Red color for top 5 nearest locations
+    fontWeight: 'bold',
   },
   itemType: {
     fontSize: vw(3.8),
