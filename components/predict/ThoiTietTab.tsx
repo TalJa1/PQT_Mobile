@@ -253,7 +253,7 @@ const ThoiTietTab = () => {
             <Text
               style={[
                 styles.hourlyTemp,
-                item.isCurrent && styles.currentHourText, // Use isCurrent flag
+                item.isCurrent && styles.currentHourText,
               ]}>
               {item.temp}
             </Text>
