@@ -80,12 +80,16 @@ const ThoiTietTab = () => {
       setError(null);
 
       // Get current location
-      const location = await locationService.getCurrentPosition(); // Fetch 7-day forecast with hourly data
+      const location = await locationService.getCurrentPosition();
+      console.log('User location:', location);
+
+      // Fetch 7-day forecast with hourly data
       const forecast = await weatherService.getWeatherForecast(
         location.latitude,
         location.longitude,
         7,
       );
+
       console.log('Forecast data received:', {
         location: forecast.location,
         totalDays: forecast.forecast.forecastday.length,
@@ -93,27 +97,65 @@ const ThoiTietTab = () => {
         hourlyDataLength: forecast.forecast.forecastday[0]?.hour?.length,
       });
 
+      if (!forecast || !forecast.forecast || !forecast.forecast.forecastday) {
+        throw new Error('Invalid forecast data structure received from API');
+      }
+
+      if (forecast.forecast.forecastday.length === 0) {
+        throw new Error('No forecast days available from API');
+      }
+
+      if (
+        !forecast.forecast.forecastday[0].hour ||
+        forecast.forecast.forecastday[0].hour.length === 0
+      ) {
+        console.warn('No hourly data available for today');
+      }
+
       setForecastData(forecast);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error fetching weather data:', err);
-      setError('Không thể tải dữ liệu thời tiết');
+
+      if (
+        err.message?.includes('Network Error') ||
+        err.code === 'NETWORK_ERROR'
+      ) {
+        setError('Không có kết nối mạng. Vui lòng kiểm tra internet.');
+      } else if (err.response?.status === 401) {
+        setError('API key không hợp lệ. Vui lòng liên hệ nhà phát triển.');
+      } else if (err.response?.status === 403) {
+        setError('Đã vượt quá giới hạn API. Vui lòng thử lại sau.');
+      } else if (err.message?.includes('location')) {
+        setError('Không thể lấy vị trí. Vui lòng cấp quyền truy cập vị trí.');
+      } else {
+        setError('Không thể tải dữ liệu thời tiết. Vui lòng thử lại.');
+      }
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchWeatherData();
   }, []);
 
+  const handleRefresh = () => {
+    fetchWeatherData();
+  };
   const generateHourlyData = () => {
     if (!forecastData?.forecast?.forecastday?.[0]?.hour) {
+      console.log('No hourly forecast data available');
       return [];
     }
 
     const todayHours = forecastData.forecast.forecastday[0].hour;
     const now = new Date();
     const currentHour = now.getHours();
+
+    console.log('Processing hourly data:', {
+      totalHours: todayHours.length,
+      currentHour: currentHour,
+      sampleHour: todayHours[0],
+    });
 
     return todayHours.map((hourData, index) => {
       const isCurrentHour = index === currentHour;
@@ -125,9 +167,12 @@ const ThoiTietTab = () => {
         time: displayTime,
         hour: index,
         isCurrent: isCurrentHour,
-        icon: getWeatherIcon(hourData.condition.text, hourData.condition.icon),
-        temp: `${Math.round(hourData.temp_c)}°`,
-        rain: `${hourData.chance_of_rain}%`,
+        icon: getWeatherIcon(
+          hourData.condition?.text || 'clear',
+          hourData.condition?.icon || '',
+        ),
+        temp: `${Math.round(hourData.temp_c || 0)}°`,
+        rain: `${hourData.chance_of_rain || 0}%`,
       };
     });
   };
@@ -148,16 +193,17 @@ const ThoiTietTab = () => {
       const dayName = index === 0 ? 'Hôm nay' : getDayOfWeekVietnamese(date);
       const formattedDate = `${date.getDate()}/${date.getMonth() + 1}`;
 
+      // Ensure all required properties exist with fallbacks
       return {
         day: `${dayName}, ${formattedDate}`,
         icon: getWeatherIcon(
-          dayData.day.condition.text,
-          dayData.day.condition.icon,
+          dayData.day?.condition?.text || 'clear',
+          dayData.day?.condition?.icon || '',
         ),
-        temp: `${Math.round(dayData.day.maxtemp_c)}°`,
-        minTemp: `${Math.round(dayData.day.mintemp_c)}°`,
-        condition: dayData.day.condition.text,
-        rainChance: `${dayData.day.daily_chance_of_rain}%`,
+        temp: `${Math.round(dayData.day?.maxtemp_c || 0)}°`,
+        minTemp: `${Math.round(dayData.day?.mintemp_c || 0)}°`,
+        condition: dayData.day?.condition?.text || 'Không có dữ liệu',
+        rainChance: `${dayData.day?.daily_chance_of_rain || 0}%`,
       };
     });
   };
@@ -204,13 +250,13 @@ const ThoiTietTab = () => {
             {textAlign: 'center', color: '#ff6b6b'},
           ]}>
           {error}
-        </Text>
+        </Text>{' '}
         <Text
           style={[
             styles.sectionTitle,
             {textAlign: 'center', marginTop: vh(2), fontSize: vw(3.5)},
           ]}
-          onPress={fetchWeatherData}>
+          onPress={handleRefresh}>
           Nhấn để thử lại
         </Text>
       </View>
@@ -406,6 +452,16 @@ const styles = StyleSheet.create({
     color: '#1F2D54',
     opacity: 0.7,
     textAlign: 'right',
+  },
+  debugInfoContainer: {
+    padding: vw(4),
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: vw(5),
+    margin: vw(2),
+  },
+  debugInfoText: {
+    fontSize: vw(3.5),
+    color: '#333',
   },
 });
 

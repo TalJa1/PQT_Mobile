@@ -229,9 +229,9 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
           </Text>
         </View>
         <View style={styles.detailItem}>
-          <Text style={dynamicStyles.detailLabel}>MÂY</Text>
+          <Text style={dynamicStyles.detailLabel}>CẢM THẤY</Text>
           <Text style={dynamicStyles.detailValue}>
-            {weatherData?.current.cloud ?? '--'}%
+            {weatherData?.current.feelslike_c ?? '--'}°
           </Text>
         </View>
         <View style={styles.detailItem}>

@@ -75,18 +75,37 @@ class WeatherService {
       console.error('Error fetching current weather:', error);
       throw error;
     }
-  }  // Get weather forecast by coordinates
+  } // Get weather forecast by coordinates
   async getWeatherForecast(
     lat: number,
     lon: number,
     days: number = 7,
   ): Promise<ForecastData> {
-    try {      const response = await axios.get(
-        `${WEATHER_BASE_URL}/forecast.json?key=${this.apiKey}&q=${lat},${lon}&days=${days}&aqi=no&alerts=no`,
+    try {
+      const url = `${WEATHER_BASE_URL}/forecast.json?key=${this.apiKey}&q=${lat},${lon}&days=${days}&aqi=no&alerts=no`;
+      console.log(
+        'Fetching weather forecast from:',
+        url.replace(this.apiKey, 'API_KEY_HIDDEN'),
       );
+
+      const response = await axios.get(url);
+
+      console.log('Weather forecast response status:', response.status);
+      console.log('Weather forecast response data structure:', {
+        hasLocation: !!response.data.location,
+        hasForecast: !!response.data.forecast,
+        forecastDaysCount: response.data.forecast?.forecastday?.length || 0,
+        firstDayHasHourly:
+          !!response.data.forecast?.forecastday?.[0]?.hour?.length,
+      });
+
       return response.data;
-    } catch (error) {
-      console.error('Error fetching weather forecast:', error);
+    } catch (error: any) {
+      console.error('Error fetching weather forecast:', {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
       throw error;
     }
   }
