@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {fakeHCMCKLocations, LocationData} from '../../services/data';
@@ -46,22 +47,42 @@ const NearbySheltersScreen = () => {
   const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState<LocationCoords | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getUserLocation = async () => {
+    try {
+      const location = await locationService.getCurrentPosition();
+      console.log('User location updated:', location);
+      setUserLocation(location);
+    } catch (error) {
+      console.error('Error getting user location:', error);
+      // Set default location (Ho Chi Minh City center) if GPS fails
+      setUserLocation({latitude: 10.7769, longitude: 106.7009});
+    }
+  };
 
   useEffect(() => {
-    const getUserLocation = async () => {
-      try {
-        const location = await locationService.getCurrentPosition();
-        setUserLocation(location);
-      } catch (error) {
-        console.error('Error getting user location:', error);
-        // Set default location (Ho Chi Minh City center) if GPS fails
-        setUserLocation({latitude: 10.7769, longitude: 106.7009});
-      } finally {
-        setLoading(false);
-      }
+    const initializeLocation = async () => {
+      setLoading(true);
+      await getUserLocation();
+      setLoading(false);
     };
 
-    getUserLocation();
+    initializeLocation();
+  }, []);
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    console.log('Refreshing location data...');
+
+    try {
+      // Re-fetch current location and recalculate distances
+      await getUserLocation();
+      console.log('Location data refreshed successfully');
+    } catch (error) {
+      console.error('Error during refresh:', error);
+    } finally {
+      setRefreshing(false);
+    }
   }, []);
   const getDistanceForLocation = (location: LocationData): string => {
     if (!userLocation) {
@@ -145,6 +166,16 @@ const NearbySheltersScreen = () => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
         style={styles.list}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#2C3E50']} // Android
+            tintColor="#2C3E50" // iOS
+            title="Đang cập nhật vị trí..." // iOS
+            titleColor="#2C3E50" // iOS
+          />
+        }
       />
     </View>
   );
