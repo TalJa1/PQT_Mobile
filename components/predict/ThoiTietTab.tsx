@@ -309,7 +309,7 @@ const ThoiTietTab = () => {
 
       <View style={styles.next7daysContainer}>
         <Text style={[styles.sectionTitle, {color: '#1F2D54'}]}>
-          7 ngày tới
+          3 ngày tới
         </Text>
         <View>
           {dailyData.map((item, index) => (
